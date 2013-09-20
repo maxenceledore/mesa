@@ -75,6 +75,7 @@ struct _mesa_HashTable;
 struct gl_attrib_node;
 struct gl_list_extensions;
 struct gl_meta_state;
+struct gl_named_string;
 struct gl_program_cache;
 struct gl_texture_object;
 struct gl_debug_state;
@@ -82,6 +83,7 @@ struct gl_context;
 struct st_context;
 struct gl_uniform_storage;
 struct prog_instruction;
+struct tree_node;
 struct gl_program_parameter_list;
 struct set;
 struct set_entry;
@@ -2680,6 +2682,36 @@ struct gl_shader
 };
 
 
+/** ARB_shading_language_include */
+
+struct gl_named_string {
+   GLenum Type;
+   GLint lenght;
+   GLchar *string;
+   struct tree_node *path_location;
+};
+
+
+struct tree_node {
+   mtx_t Mutex;
+
+   GLchar * node_name;
+
+   struct tree_node *parent;
+
+   /* The first child (head of a linked list) */
+   struct tree_node *child;
+
+   /* Linked list of siblings */
+   struct tree_node *prev;
+   struct tree_node *next;
+
+   struct gl_named_string ns;
+
+   GLboolean DeletePending;
+};
+
+
 struct gl_uniform_buffer_variable
 {
    char *Name;
@@ -4500,6 +4532,13 @@ struct gl_context
    struct vbo_context *vbo_context;
    struct st_context *st;
    void *aelt_context;
+   /*@}*/
+
+/**
+    * \name ARB_shading_language_include
+    */
+   /*@{*/
+   struct tree_node tree_loc_root;
    /*@}*/
 
    /**

@@ -132,6 +132,7 @@ MAIN_FILES = \
 	main/mtypes.h \
 	main/multisample.c \
 	main/multisample.h \
+	main/namedstring.c \
 	main/objectlabel.c \
 	main/objectlabel.h \
 	main/pack.c \

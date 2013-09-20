@@ -129,6 +129,17 @@ _mesa_init_shader_state(struct gl_context *ctx)
    /* Extended for ARB_separate_shader_objects */
    ctx->Shader.RefCount = 1;
    mtx_init(&ctx->Shader.Mutex, mtx_plain);
+
+   /* TODO: move this to gl_shader_compiler_options member in struct context */
+   ctx->tree_loc_root.parent = &ctx->tree_loc_root;
+   ctx->tree_loc_root.prev = NULL;
+   ctx->tree_loc_root.next = NULL;
+   ctx->tree_loc_root.child = NULL;
+   ctx->tree_loc_root.DeletePending = GL_FALSE;
+   ctx->tree_loc_root.ns.lenght = 0;
+   ctx->tree_loc_root.ns.string = NULL;
+   ctx->tree_loc_root.ns.path_location = &ctx->tree_loc_root;
+   ctx->tree_loc_root.ns.Type = GL_SHADER_INCLUDE_ARB;
 }
 
 
