@@ -607,6 +607,7 @@ static const _mesa_glsl_extension _mesa_glsl_supported_extensions[] = {
    EXT(ARB_shader_stencil_export,      true,  false,     ARB_shader_stencil_export),
    EXT(ARB_shader_texture_lod,         true,  false,     ARB_shader_texture_lod),
    EXT(ARB_shading_language_420pack,   true,  false,     ARB_shading_language_420pack),
+   EXT(ARB_shading_language_include,   true,  true,      dummy_true),
    EXT(ARB_shading_language_packing,   true,  false,     ARB_shading_language_packing),
    EXT(ARB_texture_cube_map_array,     true,  false,     ARB_texture_cube_map_array),
    EXT(ARB_texture_gather,             true,  false,     ARB_texture_gather),

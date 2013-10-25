@@ -154,6 +154,7 @@ static const struct extension extension_table[] = {
    { "GL_ARB_shader_stencil_export",               o(ARB_shader_stencil_export),               GL,             2009 },
    { "GL_ARB_shader_texture_lod",                  o(ARB_shader_texture_lod),                  GL,             2009 },
    { "GL_ARB_shading_language_100",                o(dummy_true),                              GLL,            2003 },
+   { "GL_ARB_shading_language_include",            o(dummy_true),                              GL,             2010 },
    { "GL_ARB_shading_language_packing",            o(ARB_shading_language_packing),            GL,             2011 },
    { "GL_ARB_shading_language_420pack",            o(ARB_shading_language_420pack),            GL,             2011 },
    { "GL_ARB_shadow",                              o(ARB_shadow),                              GLL,            2001 },
