@@ -175,6 +175,7 @@ HASH		^{SPC}#{SPC}
 ^[ \t]*#[ \t]*$			;
 ^[ \t]*#[ \t]*version		{ BEGIN PP; return VERSION_TOK; }
 ^[ \t]*#[ \t]*extension		{ BEGIN PP; return EXTENSION; }
+^[ \t]*#[ \t]*include		{ BEGIN PP; return INCLUDE; }
 {HASH}line{SPCP}{INT}{SPCP}{INT}{SPC}$ {
 				   /* Eat characters until the first digit is
 				    * encountered

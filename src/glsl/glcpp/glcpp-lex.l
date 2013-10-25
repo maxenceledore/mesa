@@ -300,9 +300,10 @@ HEXADECIMAL_INTEGER	0[xX][0-9a-fA-F]+[uU]?
 	BEGIN INITIAL;
 }
 
-	/* glcpp doesn't handle #extension, #version, or #pragma directives.
+	/* glcpp doesn't handle #extension, #version, #include, or #pragma directives.
 	 * Simply pass them through to the main compiler's lexer/parser. */
-<HASH>(extension|pragma)[^\r\n]* {
+
+<HASH>(extension|pragma|include)[^\r\n]* {
 	BEGIN INITIAL;
 	RETURN_STRING_TOKEN (PRAGMA);
 }

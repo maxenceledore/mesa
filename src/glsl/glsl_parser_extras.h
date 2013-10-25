@@ -210,6 +210,8 @@ struct _mesa_glsl_parse_state {
       return ARB_gpu_shader_fp64_enable || is_version(400, 0);
    }
 
+   void process_include_directive(YYLTYPE *locp, const char *incpath);
+
    void process_version_directive(YYLTYPE *locp, int version,
                                   const char *ident);
 
@@ -439,6 +441,8 @@ struct _mesa_glsl_parse_state {
    bool ARB_shader_texture_lod_warn;
    bool ARB_shading_language_420pack_enable;
    bool ARB_shading_language_420pack_warn;
+   bool ARB_shading_language_include_enable;
+   bool ARB_shading_language_include_warn;
    bool ARB_shading_language_packing_enable;
    bool ARB_shading_language_packing_warn;
    bool ARB_texture_cube_map_array_enable;
@@ -513,6 +517,10 @@ struct _mesa_glsl_parse_state {
    unsigned atomic_counter_offsets[MAX_COMBINED_ATOMIC_BUFFERS];
 
    bool allow_extension_directive_midshader;
+
+   struct tree_node  *root_include_path;
+   struct tree_node **include_search_path_locations;
+   unsigned locations_count;
 };
 
 # define YYLLOC_DEFAULT(Current, Rhs, N)			\

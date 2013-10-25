@@ -27,6 +27,7 @@
 
 #include "main/core.h" /* for struct gl_context */
 #include "main/context.h"
+#include "main/namedstring.h"
 #include "main/shaderobj.h"
 #include "util/u_atomic.h" /* for p_atomic_cmpxchg */
 #include "util/ralloc.h"
@@ -217,6 +218,14 @@ _mesa_glsl_parse_state::_mesa_glsl_parse_state(struct gl_context *_ctx,
           sizeof(this->atomic_counter_offsets));
    this->allow_extension_directive_midshader =
       ctx->Const.AllowGLSLExtensionDirectiveMidShader;
+
+   /* ARB_shading_language_include.
+    * 
+    * As customized search paths are defined per shader object with
+    * glCompileShaderInclude(), the place of choice to set these ones seems
+    * to be _mesa_glsl_compile_shader().
+    */
+   this->root_include_path = &ctx->tree_loc_root;
 }
 
 /**
@@ -268,6 +277,50 @@ _mesa_glsl_parse_state::check_version(unsigned required_glsl_version,
                     requirement_string);
 
    return false;
+}
+
+/**
+ * Process a GLSL #include directive.
+ *
+ * \param incpath is a string that follows the #include token.
+ */
+void
+_mesa_glsl_parse_state::process_include_directive(YYLTYPE *locp,
+                                                  const char *incpath)
+{
+   bool relative_path = 0;
+   int incpath_len = strlen(incpath);
+   char *incpath_dup = NULL;
+   struct tree_node *tn = NULL;
+
+   if (incpath) {
+     int file_len = 0;
+     bool illegal_file = false;
+
+     file_len = strlen(incpath);
+
+      if (incpath[0] != '<' || incpath[0] != '"')
+         illegal_file = true;
+
+      if (incpath[file_len-1] != '>' || incpath[file_len-1] != '"')
+         illegal_file = true;
+
+      if (illegal_file)
+         _mesa_glsl_error(locp, this,
+                          "illegal path following include directive");
+   }
+   /* duplicate include path without any quotes */
+   incpath = strndup(incpath+1, incpath_len-2);
+
+   if(incpath_dup[0] != '/')
+     relative_path = true;
+
+   if(relative_path) {
+     tn = this->include_search_path_locations[0];
+   }
+   else {
+     tn = this->root_include_path;
+   }
 }
 
 /**
@@ -1478,6 +1531,9 @@ _mesa_glsl_compile_shader(struct gl_context *ctx, struct gl_shader *shader,
    if (ctx->Const.GenerateTemporaryNames)
       (void) p_atomic_cmpxchg(&ir_variable::temporaries_allocate_names,
                               false, true);
+
+   state->include_search_path_locations = shader->IncludeSearchPathLocations;
+   state->locations_count = shader->LocationsCount;
 
    state->error = glcpp_preprocess(state, &source, &state->info_log,
                              &ctx->Extensions, ctx);

@@ -185,6 +185,7 @@ static bool match_layout_qualifier(const char *s1, const char *s2,
 %token PRAGMA_DEBUG_ON PRAGMA_DEBUG_OFF
 %token PRAGMA_OPTIMIZE_ON PRAGMA_OPTIMIZE_OFF
 %token PRAGMA_INVARIANT_ALL
+%token INCLUDE
 %token LAYOUT_TOK
 
    /* Reserved words that are not actually used in the grammar.
@@ -377,6 +378,16 @@ extension_statement:
    EXTENSION any_identifier COLON any_identifier EOL
    {
       if (!_mesa_glsl_process_extension($2, & @2, $4, & @4, state)) {
+         YYERROR;
+      }
+   }
+   ;
+
+include_statement:
+   INCLUDE any_identifier EOL
+   {
+      state->process_include_directive(&@2, $2);
+      if (state->error) {
          YYERROR;
       }
    }
