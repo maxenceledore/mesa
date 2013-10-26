@@ -56,9 +56,15 @@ translate_blend(GLenum blend)
       return PIPE_BLEND_SUBTRACT;
    case GL_FUNC_REVERSE_SUBTRACT:
       return PIPE_BLEND_REVERSE_SUBTRACT;
+   /* GLenum blend token is checked to care GL_MIN/GL_MAX cases
+    * at update_blend() call. In these two cases
+    * Src and Dst factors will be both set to PIPE_BLENDFACTOR_ONE.
+    */
    case GL_MIN:
+   case GL_FACTOR_MIN_AMD:
       return PIPE_BLEND_MIN;
    case GL_MAX:
+   case GL_FACTOR_MAX_AMD:
       return PIPE_BLEND_MAX;
 
    /* blend factors */
