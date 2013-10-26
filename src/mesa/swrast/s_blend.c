@@ -764,6 +764,16 @@ blend_general_float(struct gl_context *ctx, GLuint n, const GLubyte mask[],
 	    g = MAX2( Gd, Gs );
 	    b = MAX2( Bd, Bs );
             break;
+         case GL_FACTOR_MIN_AMD:
+            r = MIN2( Rs * sR, Rd * dR);
+            g = MIN2( Gs * sG, Gd * dG);
+            b = MIN2( Bs * sB, Bd * dB);
+            break;
+         case GL_FACTOR_MAX_AMD:
+            r = MAX2( Rs * sR, Rd * dR);
+            g = MAX2( Gs * sG, Gd * dG);
+            b = MAX2( Bs * sB, Bd * dB);
+            break;
 	 default:
             /* should never get here */
             r = g = b = 0.0F;  /* silence uninitialized var warning */
@@ -787,6 +797,12 @@ blend_general_float(struct gl_context *ctx, GLuint n, const GLubyte mask[],
             break;
          case GL_MAX:
 	    a = MAX2( Ad, As );
+            break;
+         case GL_FACTOR_MIN_AMD:
+            a = MIN2( As * sA, Ad * dA);
+            break;
+         case GL_FACTOR_MAX_AMD:
+            a = MAX2( As * sA, Ad * dA);
             break;
          default:
             /* should never get here */
