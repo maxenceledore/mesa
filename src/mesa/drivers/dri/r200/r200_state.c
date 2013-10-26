@@ -253,10 +253,18 @@ static void r200_set_blend_state( struct gl_context * ctx )
          (R200_BLEND_GL_ONE << R200_DST_BLEND_SHIFT);
       break;
 
+   case GL_FACTOR_MIN_AMD:
+      eqn = R200_COMB_FCN_MIN;
+      break;
+
    case GL_MAX:
       eqn = R200_COMB_FCN_MAX;
       func = (R200_BLEND_GL_ONE << R200_SRC_BLEND_SHIFT) |
          (R200_BLEND_GL_ONE << R200_DST_BLEND_SHIFT);
+      break;
+
+   case GL_FACTOR_MAX_AMD:
+      eqn = R200_COMB_FCN_MAX;
       break;
 
    default:
@@ -287,10 +295,18 @@ static void r200_set_blend_state( struct gl_context * ctx )
          (R200_BLEND_GL_ONE << R200_DST_BLEND_SHIFT);
       break;
 
+   case GL_FACTOR_MIN_AMD:
+      eqnA = R200_COMB_FCN_MIN;
+      break;
+
    case GL_MAX:
       eqnA = R200_COMB_FCN_MAX;
       funcA = (R200_BLEND_GL_ONE << R200_SRC_BLEND_SHIFT) |
          (R200_BLEND_GL_ONE << R200_DST_BLEND_SHIFT);
+      break;
+
+   case GL_FACTOR_MAX_AMD:
+      eqnA = R200_COMB_FCN_MAX;
       break;
 
    default:
