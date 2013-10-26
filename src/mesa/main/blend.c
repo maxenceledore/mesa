@@ -326,6 +326,9 @@ legal_blend_equation(const struct gl_context *ctx, GLenum mode)
    case GL_MIN:
    case GL_MAX:
       return ctx->Extensions.EXT_blend_minmax;
+   case GL_FACTOR_MIN_AMD:
+   case GL_FACTOR_MAX_AMD:
+      return ctx->Extensions.AMD_blend_minmax_factor;
    default:
       return GL_FALSE;
    }

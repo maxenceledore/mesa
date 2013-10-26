@@ -339,6 +339,7 @@ static const struct extension extension_table[] = {
 
    /* Vendor extensions */
    { "GL_3DFX_texture_compression_FXT1",           o(TDFX_texture_compression_FXT1),           GL,             1999 },
+   { "GL_AMD_blend_minmax_factor",                 o(AMD_blend_minmax_factor),                 GL,             2009 },
    { "GL_AMD_conservative_depth",                  o(ARB_conservative_depth),                  GL,             2009 },
    { "GL_AMD_draw_buffers_blend",                  o(ARB_draw_buffers_blend),                  GL,             2009 },
    { "GL_AMD_performance_monitor",                 o(AMD_performance_monitor),                 GL,             2007 },
