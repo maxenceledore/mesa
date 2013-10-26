@@ -43,8 +43,10 @@ GLuint brw_translate_blend_equation( GLenum mode )
    case GL_FUNC_ADD:
       return BRW_BLENDFUNCTION_ADD;
    case GL_MIN:
+   case GL_FACTOR_MIN_AMD:
       return BRW_BLENDFUNCTION_MIN;
    case GL_MAX:
+   case GL_FACTOR_MAX_AMD:
       return BRW_BLENDFUNCTION_MAX;
    case GL_FUNC_SUBTRACT:
       return BRW_BLENDFUNCTION_SUBTRACT;

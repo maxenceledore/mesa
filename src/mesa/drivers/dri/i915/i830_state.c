@@ -303,9 +303,15 @@ i830_set_blend_state(struct gl_context * ctx)
       eqnRGB = BLENDFUNC_MIN;
       funcRGB = SRC_BLND_FACT(BLENDFACT_ONE) | DST_BLND_FACT(BLENDFACT_ONE);
       break;
+   case GL_FACTOR_MIN_AMD:
+      eqnRGB = BLENDFUNC_MIN;
+      break;
    case GL_MAX:
       eqnRGB = BLENDFUNC_MAX;
       funcRGB = SRC_BLND_FACT(BLENDFACT_ONE) | DST_BLND_FACT(BLENDFACT_ONE);
+      break;
+   case GL_FACTOR_MAX_AMD:
+      eqnRGB = BLENDFUNC_MAX;
       break;
    case GL_FUNC_SUBTRACT:
       eqnRGB = BLENDFUNC_SUB;
@@ -331,9 +337,15 @@ i830_set_blend_state(struct gl_context * ctx)
       eqnA = BLENDFUNC_MIN;
       funcA = SRC_BLND_FACT(BLENDFACT_ONE) | DST_BLND_FACT(BLENDFACT_ONE);
       break;
+   case GL_FACTOR_MIN_AMD:
+      eqnA = BLENDFUNC_MIN;
+      break;
    case GL_MAX:
       eqnA = BLENDFUNC_MAX;
       funcA = SRC_BLND_FACT(BLENDFACT_ONE) | DST_BLND_FACT(BLENDFACT_ONE);
+      break;
+   case GL_FACTOR_MAX_AMD:
+      eqnA = BLENDFUNC_MAX;
       break;
    case GL_FUNC_SUBTRACT:
       eqnA = BLENDFUNC_SUB;
