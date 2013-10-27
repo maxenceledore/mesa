@@ -73,8 +73,10 @@ nvgl_blend_eqn(unsigned eqn)
 	case GL_FUNC_ADD:
 		return 0x8006;
 	case GL_MIN:
+	case GL_FACTOR_MIN_AMD:
 		return 0x8007;
 	case GL_MAX:
+	case GL_FACTOR_MAX_AMD:
 		return 0x8008;
 	case GL_FUNC_SUBTRACT:
 		return 0x800a;

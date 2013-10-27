@@ -63,12 +63,20 @@ void
 nv10_emit_blend_equation(struct gl_context *ctx, int emit)
 {
 	struct nouveau_pushbuf *push = context_push(ctx);
+	unsigned eqn = ctx->Color.Blend[0].EquationRGB;
 
 	BEGIN_NV04(push, NV10_3D(BLEND_FUNC_ENABLE), 1);
 	PUSH_DATAb(push, ctx->Color.BlendEnabled);
 
 	BEGIN_NV04(push, NV10_3D(BLEND_EQUATION), 1);
-	PUSH_DATA (push, nvgl_blend_eqn(ctx->Color.Blend[0].EquationRGB));
+	PUSH_DATA (push, nvgl_blend_eqn(eqn));
+
+        if(eqn == GL_MIN || eqn == GL_MAX)
+        {
+	  BEGIN_NV04(push, NV10_3D(BLEND_FUNC_SRC), 2);
+	  PUSH_DATA (push, NV10_3D_BLEND_FUNC_SRC_ONE);
+	  PUSH_DATA (push, NV10_3D_BLEND_FUNC_DST_ONE);
+        }
 }
 
 void
