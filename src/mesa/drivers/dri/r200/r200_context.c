@@ -352,6 +352,7 @@ GLboolean r200CreateContext( gl_api api,
    ctx->Extensions.ARB_texture_env_crossbar = true;
    ctx->Extensions.ARB_texture_mirror_clamp_to_edge = true;
    ctx->Extensions.ARB_vertex_program = true;
+   ctx->Extensions.AMD_blend_minmax_factor = true;
    ctx->Extensions.ATI_fragment_shader = (ctx->Const.MaxTextureUnits == 6);
    ctx->Extensions.ATI_texture_env_combine3 = true;
    ctx->Extensions.ATI_texture_mirror_once = true;

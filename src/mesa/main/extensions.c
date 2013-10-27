@@ -488,6 +488,7 @@ _mesa_enable_sw_extensions(struct gl_context *ctx)
    ctx->Extensions.ARB_vertex_shader = GL_TRUE;
    ctx->Extensions.ARB_sync = GL_TRUE;
    ctx->Extensions.APPLE_object_purgeable = GL_TRUE;
+   ctx->Extensions.AMD_blend_minmax_factor = GL_TRUE;
    ctx->Extensions.ATI_fragment_shader = GL_TRUE;
    ctx->Extensions.ATI_texture_compression_3dc = GL_TRUE;
    ctx->Extensions.ATI_texture_env_combine3 = GL_TRUE;
