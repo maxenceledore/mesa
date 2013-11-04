@@ -83,6 +83,8 @@ struct tgsi_shader_info
    boolean uses_vertexid;
    boolean uses_vertexid_nobase;
    boolean uses_basevertex;
+   boolean uses_baseinstance;
+   boolean uses_drawid;
    boolean uses_primid;
    boolean uses_frontface;
    boolean writes_psize;

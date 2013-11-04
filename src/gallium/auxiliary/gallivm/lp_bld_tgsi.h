@@ -163,8 +163,11 @@ struct lp_bld_tgsi_system_values {
    LLVMValueRef instance_id;
    LLVMValueRef vertex_id;
    LLVMValueRef vertex_id_nobase;
+   LLVMValueRef base_vertex;
    LLVMValueRef prim_id;
    LLVMValueRef basevertex;
+   LLVMValueRef base_instance;
+   LLVMValueRef draw_id;
 };
 
 

@@ -1532,6 +1532,21 @@ emit_fetch_system_value(
       atype = TGSI_TYPE_UNSIGNED;
       break;
 
+   case TGSI_SEMANTIC_BASE_VERTEX:
+      res = bld->system_values.base_vertex;
+      atype = TGSI_TYPE_UNSIGNED;
+      break;
+
+   case TGSI_SEMANTIC_BASE_INSTANCE:
+      res = bld->system_values.base_instance;
+      atype = TGSI_TYPE_UNSIGNED;
+      break;
+
+   case TGSI_SEMANTIC_DRAWID:
+      res = bld->system_values.draw_id;
+      atype = TGSI_TYPE_UNSIGNED;
+      break;
+
    default:
       assert(!"unexpected semantic in emit_fetch_system_value");
       res = bld_base->base.zero;

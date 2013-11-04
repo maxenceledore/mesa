@@ -865,6 +865,12 @@ builtin_variable_generator::generate_vs_special_vars()
       add_input(VERT_ATTRIB_TEX6, vec4_t, "gl_MultiTexCoord6");
       add_input(VERT_ATTRIB_TEX7, vec4_t, "gl_MultiTexCoord7");
       add_input(VERT_ATTRIB_FOG, float_t, "gl_FogCoord");
+   if (state->ARB_shader_draw_parameters_enable)
+      add_system_value(SYSTEM_VALUE_BASE_VERTEX, int_t, "gl_BaseVertexARB");
+   if (state->ARB_shader_draw_parameters_enable)
+      add_system_value(SYSTEM_VALUE_BASE_INSTANCE, int_t, "gl_BaseInstanceARB");
+   if (state->ARB_shader_draw_parameters_enable)
+      add_system_value(SYSTEM_VALUE_DRAW_ID, int_t, "gl_DrawIDARB");
    }
 }
 

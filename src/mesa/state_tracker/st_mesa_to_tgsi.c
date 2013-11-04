@@ -1147,7 +1147,10 @@ st_translate_mesa_program(
             unsigned semName = _mesa_sysval_to_semantic[i];
             t->systemValues[i] = ureg_DECL_system_value(ureg, numSys, semName, 0);
             if (semName == TGSI_SEMANTIC_INSTANCEID ||
-                semName == TGSI_SEMANTIC_VERTEXID) {
+                semName == TGSI_SEMANTIC_VERTEXID ||
+                semName == TGSI_SEMANTIC_BASE_VERTEX ||
+                semName == TGSI_SEMANTIC_BASE_INSTANCE ||
+                semName == TGSI_SEMANTIC_DRAWID) {
                /* From Gallium perspective, these system values are always
                 * integer, and require native integer support.  However, if
                 * native integer is supported on the vertex stage but not the

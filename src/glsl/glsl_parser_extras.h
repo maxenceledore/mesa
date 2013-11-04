@@ -519,6 +519,8 @@ struct _mesa_glsl_parse_state {
    bool EXT_shader_integer_mix_warn;
    bool EXT_texture_array_enable;
    bool EXT_texture_array_warn;
+   bool ARB_shader_draw_parameters_enable;
+   bool ARB_shader_draw_parameters_warn;
    /*@}*/
 
    /** Extensions supported by the OpenGL implementation. */
