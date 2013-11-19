@@ -211,4 +211,8 @@ if HAVE_OPENVG
 SUBDIRS += vgapi
 endif
 
+if HAVE_OPENVX
+SUBDIRS += vxapi
+endif
+
 include $(top_srcdir)/install-lib-links.mk

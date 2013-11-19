@@ -1,0 +1,12 @@
+prefix=/usr/local
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: vx
+Description: Mesa OpenVX 1.0 library
+Requires.private:
+Version: 10.5.0-devel
+Libs: -L${libdir} -lOpenVX
+Libs.private: 
+Cflags: -I${includedir}

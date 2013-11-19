@@ -1,0 +1,61 @@
+#######################################################################
+# SConscript for vxapi
+
+from sys import executable as python_cmd
+
+Import('*')
+
+env = env.Clone()
+
+vxapi_header, = env.CodeGenerate(
+    target = 'vxapi_tmp.h',
+    script = '../mapi_abi.py',
+    source = 'vxapi.csv',
+    command = python_cmd + ' $SCRIPT --printer vxapi --mode lib $SOURCE > $TARGET'
+)
+
+env.Append(CPPDEFINES = [
+    'MAPI_ABI_HEADER=\\"vxapi/vxpi_tmp.h\\"',
+    'MAPI_DLL_EXPORTS',
+    'KHRONOS_DLL_EXPORTS',
+])
+
+env.Append(CPPPATH = [
+    '#/include',
+    '#/src/mapi',
+    Dir('..'), # vxapi/vxapi_tmp.h build path
+])
+
+mapi_sources = [
+    'entry.c',
+    'mapi.c',
+    'stub.c',
+    'table.c',
+    'u_current.c',
+    'u_execmem.c',
+]
+
+vxapi_objects = []
+for s in mapi_sources:
+    o = env.SharedObject(s[:-2], '../' + s)
+    vxapi_objects.append(o)
+
+env.Depends(vxapi_objects, vxapi_header)
+
+# libOpenVX.dll
+env['LIBPREFIX'] = 'lib'
+env['SHLIBPREFIX'] = 'lib'
+
+openvx = env.SharedLibrary(
+    target = 'OpenVX',
+    source = vxapi_objects,
+)
+
+env.InstallSharedLibrary(openvx, version=(1, 0, 0))
+
+if env['platform'] == 'windows':
+    openvx = env.FindIxes(openvx, 'LIBPREFIX', 'LIBSUFFIX')
+else:
+    openvx = env.FindIxes(openvx, 'SHLIBPREFIX', 'SHLIBSUFFIX')
+
+Export(['openvx'])

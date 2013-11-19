@@ -29,6 +29,8 @@ SConscript('mesa/SConscript')
 
 SConscript('mapi/vgapi/SConscript')
 
+SConscript('mapi/vxapi/SConscript')
+
 if not env['embedded']:
     if env['platform'] not in ('cygwin', 'darwin', 'freebsd', 'haiku', 'windows'):
         SConscript('glx/SConscript')

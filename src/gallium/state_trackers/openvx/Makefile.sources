@@ -1,0 +1,7 @@
+C_SOURCES := \
+	api.c \
+	ovx_context.c \
+	ovx_framework.c \
+	ovx_kernel.c \
+	ovx_image.c \
+	ovx_matrix.c

@@ -618,6 +618,11 @@ AC_ARG_ENABLE([openvg],
         [enable support for OpenVG API @<:@default=disabled@:>@])],
     [enable_openvg="$enableval"],
     [enable_openvg=no])
+AC_ARG_ENABLE([openvx],
+    [AS_HELP_STRING([--enable-openvx],
+        [enable support for OpenVX API @<:@default=enabled@:>@])],
+    [enable_openvx="$enableval"],
+    [enable_openvx=yes])
 
 AC_ARG_ENABLE([dri],
     [AS_HELP_STRING([--enable-dri],
@@ -754,6 +759,7 @@ if test "x$enable_opengl" = xno -a \
         "x$enable_vdpau" = xno -a \
         "x$enable_omx" = xno -a \
         "x$enable_va" = xno -a \
+        "x$enable_openvx" = xno -a \
         "x$enable_opencl" = xno; then
     AC_MSG_ERROR([at least one API should be enabled])
 fi
@@ -1352,6 +1358,18 @@ if test "x$enable_openvg" = xyes; then
     AC_SUBST([VG_PC_LIB_PRIV])
 fi
 AM_CONDITIONAL(HAVE_OPENVG, test "x$enable_openvg" = xyes)
+
+dnl
+dnl OpenVX configuration
+dnl
+VX_LIB_DEPS=""
+if test "x$enable_openvx" = xyes; then
+    if test "x$with_gallium_drivers" = x; then
+        AC_MSG_ERROR([cannot enable OpenVG without Gallium])
+    fi
+    GALLIUM_STATE_TRACKERS_DIRS="$GALLIUM_STATE_TRACKERS_DIRS openvx"
+fi
+AM_CONDITIONAL(HAVE_OPENVX, test "x$enable_openvx" = xyes)
 
 dnl
 dnl Gallium G3DVL configuration
@@ -2157,6 +2175,7 @@ AC_CONFIG_FILES([Makefile
 		src/gallium/state_trackers/glx/xlib/Makefile
 		src/gallium/state_trackers/nine/Makefile
 		src/gallium/state_trackers/omx/Makefile
+		src/gallium/state_trackers/openvx/Makefile
 		src/gallium/state_trackers/osmesa/Makefile
 		src/gallium/state_trackers/va/Makefile
 		src/gallium/state_trackers/vdpau/Makefile
@@ -2243,6 +2262,7 @@ dnl API info
 echo ""
 echo "        OpenGL:          $enable_opengl (ES1: $enable_gles1 ES2: $enable_gles2)"
 echo "        OpenVG:          $enable_openvg"
+echo "        OpenVX:          $enable_openvx"
 
 dnl Driver info
 echo ""

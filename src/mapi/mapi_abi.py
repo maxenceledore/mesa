@@ -833,8 +833,24 @@ class VGAPIPrinter(ABIPrinter):
         self.prefix_noop = 'noop'
         self.prefix_warn = 'vg'
 
+class VXAPIPrinter(ABIPrinter):
+    """OpenVX API Printer"""
+
+    def __init__(self, entries):
+        super(VXAPIPrinter, self).__init__(entries)
+
+        self.api_headers = ['"VX/vx.h"', '"VX/vx_api.h"', '"VX/vx_kernels.h"', '"VX/vx_nodes.h"', '"VX/vx_types.h"', '"VX/vx_vendors.h"']
+        self.api_call = 'VX_API_CALL'
+        self.api_entry = 'VX_API_ENTRY'
+        self.api_attrs = 'VX_API_EXIT'
+
+        self.prefix_lib = 'vx'
+        self.prefix_app = 'openvx'
+        self.prefix_noop = 'noop'
+        self.prefix_warn = 'vx'
+
 def parse_args():
-    printers = ['vgapi', 'glapi', 'es1api', 'es2api', 'shared-glapi']
+    printers = ['vxapi', 'vgapi', 'glapi', 'es1api', 'es2api', 'shared-glapi']
     modes = ['lib', 'app']
 
     parser = OptionParser(usage='usage: %prog [options] <filename>')
@@ -853,6 +869,7 @@ def parse_args():
 
 def main():
     printers = {
+        'vxapi': VXAPIPrinter,
         'vgapi': VGAPIPrinter,
         'glapi': GLAPIPrinter,
         'es1api': ES1APIPrinter,
