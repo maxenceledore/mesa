@@ -2558,6 +2558,9 @@ struct gl_shader
    struct gl_program *Program;  /**< Post-compile assembly code */
    GLchar *InfoLog;
    struct gl_sl_pragmas Pragmas;
+   /* ARB_shading_language_include */
+   struct tree_node **IncludeSearchPathLocations;
+   GLuint LocationsCount;
 
    unsigned Version;       /**< GLSL version used for linking */
 

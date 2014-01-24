@@ -43,6 +43,7 @@
 #include "main/enums.h"
 #include "main/hash.h"
 #include "main/mtypes.h"
+#include "main/namedstring.h"
 #include "main/pipelineobj.h"
 #include "main/shaderapi.h"
 #include "main/shaderobj.h"
@@ -879,10 +880,43 @@ compile_shader(struct gl_context *ctx, GLuint shaderObj, GLsizei count,
 {
    struct gl_shader *sh;
    struct gl_shader_compiler_options *options;
+   GLsizei i = 0;
 
    sh = _mesa_lookup_shader_err(ctx, shaderObj, "%s");
    if (!sh)
       return;
+
+   if(count && !path) {
+      _mesa_error(ctx, GL_INVALID_VALUE, "%s: count > 0 but path is NULL",
+                  caller);
+      return;
+   }
+   if(path) {
+     for(i=0 ; i < count ; i++) {
+       if(path[i] == NULL) {
+         _mesa_error(ctx, GL_INVALID_VALUE, "%s(path[%i] is NULL)",
+                     caller, i);
+         return;
+         }
+       /* it may be a better idea to check if locations are valid ones */
+       if(named_string_path_valid(ctx, -1, path[i], NULL) == GL_FALSE) {
+         _mesa_error(ctx, GL_INVALID_VALUE, "%s(path[%i] is not valid)",
+                     caller, i);
+         return;
+         }
+     }
+   }
+   if(sh->IncludeSearchPathLocations) {
+     for (i=0 ; i < sh->LocationsCount; i++) {
+       free(sh->IncludeSearchPathLocations[i]);
+     }
+     free(sh->IncludeSearchPathLocations);
+   }
+   sh->LocationsCount = count;
+   sh->IncludeSearchPathLocations = malloc(count * sizeof(struct tree_node*));
+   for(i=0 ; i <count ; i++) {
+     sh->IncludeSearchPathLocations[i] = NULL;
+   }
 
    options = &ctx->Const.ShaderCompilerOptions[sh->Stage];
 
@@ -1190,6 +1224,17 @@ _mesa_CompileShader(GLhandleARB shaderObj)
    if (MESA_VERBOSE & VERBOSE_API)
       _mesa_debug(ctx, "glCompileShader %u\n", shaderObj);
    compile_shader(ctx, shaderObj, 0, NULL, NULL, "glCompileShader");
+}
+
+
+extern void GLAPIENTRY
+_mesa_CompileShaderIncludeARB(GLuint shader, GLsizei count,
+                              const char * const *path, const GLint *length)
+{
+   GET_CURRENT_CONTEXT(ctx);
+   if (MESA_VERBOSE & VERBOSE_API)
+      _mesa_debug(ctx, "glCompileShader %u\n", shader);
+   compile_shader(ctx, shader, count, path, length, "glCompilerShaderIncludeARB");
 }
 
 

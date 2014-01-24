@@ -66,6 +66,10 @@ _mesa_AttachObjectARB(GLhandleARB, GLhandleARB);
 extern void  GLAPIENTRY
 _mesa_CompileShader(GLhandleARB);
 
+extern void GLAPIENTRY
+_mesa_CompileShaderIncludeARB(GLuint shader, GLsizei count,
+                              const char * const *path, const GLint *length);
+
 extern GLhandleARB GLAPIENTRY
 _mesa_CreateProgramObjectARB(void);
 
