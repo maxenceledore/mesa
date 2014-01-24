@@ -869,15 +869,18 @@ shader_source(struct gl_context *ctx, GLuint shader, const GLchar *source)
 
 
 /**
- * Compile a shader.
+ * Compile a shader. Optionnaly with header search paths inclusion.
+ * \param path ordered array of <count> pointers to include search path strings
+ * \param length  array of <count> vals with number of chars in each string
  */
 static void
-compile_shader(struct gl_context *ctx, GLuint shaderObj)
+compile_shader(struct gl_context *ctx, GLuint shaderObj, GLsizei count,
+               const char *const *path, const int *length, const char *caller)
 {
    struct gl_shader *sh;
    struct gl_shader_compiler_options *options;
 
-   sh = _mesa_lookup_shader_err(ctx, shaderObj, "glCompileShader");
+   sh = _mesa_lookup_shader_err(ctx, shaderObj, "%s");
    if (!sh)
       return;
 
@@ -1186,7 +1189,7 @@ _mesa_CompileShader(GLhandleARB shaderObj)
    GET_CURRENT_CONTEXT(ctx);
    if (MESA_VERBOSE & VERBOSE_API)
       _mesa_debug(ctx, "glCompileShader %u\n", shaderObj);
-   compile_shader(ctx, shaderObj);
+   compile_shader(ctx, shaderObj, 0, NULL, NULL, "glCompileShader");
 }
 
 
@@ -1916,7 +1919,7 @@ _mesa_create_shader_program(struct gl_context* ctx, GLboolean separate,
    if (shader) {
       _mesa_ShaderSource(shader, count, strings, NULL);
 
-      compile_shader(ctx, shader);
+      compile_shader(ctx, shader, 0, NULL, NULL, "glCreateShaderProgram");
 
       program = create_shader_program(ctx);
       if (program) {
