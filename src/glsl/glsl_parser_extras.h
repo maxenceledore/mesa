@@ -388,6 +388,8 @@ struct _mesa_glsl_parse_state {
    bool ARB_compute_shader_warn;
    bool ARB_shader_image_load_store_enable;
    bool ARB_shader_image_load_store_warn;
+   bool EXT_frag_depth_enable;
+   bool EXT_frag_depth_warn;
    /*@}*/
 
    /** Extensions supported by the OpenGL implementation. */
