@@ -196,6 +196,7 @@ static const struct extension extension_table[] = {
    { "GL_EXT_draw_instanced",                      o(ARB_draw_instanced),                      GL,             2006 },
    { "GL_EXT_draw_range_elements",                 o(dummy_true),                              GLL,            1997 },
    { "GL_EXT_fog_coord",                           o(dummy_true),                              GLL,            1999 },
+   { "GL_EXT_frag_depth",                          o(dummy_true),                              GL,             2010 },
    { "GL_EXT_framebuffer_blit",                    o(dummy_true),                              GL,             2005 },
    { "GL_EXT_framebuffer_multisample",             o(EXT_framebuffer_multisample),             GL,             2005 },
    { "GL_EXT_framebuffer_multisample_blit_scaled", o(EXT_framebuffer_multisample_blit_scaled), GL,             2011 },
