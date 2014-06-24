@@ -95,4 +95,12 @@ _mesa_get_stencil_ref(struct gl_context const *ctx, int face)
    return CLAMP(ref, 0, stencilMax);
 }
 
+static inline GLint
+_mesa_get_stencil_op_source_value(struct gl_context const *ctx, int face)
+{
+   GLint stencilMax = (1 << ctx->DrawBuffer->Visual.stencilBits) - 1;
+   GLint val = ctx->Stencil.OpSourceVal[face];
+   return CLAMP(val, 0, stencilMax);
+}
+
 #endif
