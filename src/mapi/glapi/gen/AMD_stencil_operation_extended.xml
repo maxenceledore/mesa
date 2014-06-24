@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE OpenGLAPI SYSTEM "gl_API.dtd">
+
+<!-- Note: no GLX protocol info yet. -->
+
+
+<OpenGLAPI>
+
+<category name="GL_AMD_stencil_operation_extended" number="413">
+
+    <enum name="SET_AMD"                        value="0x874A"/>
+    <enum name="AND"                            value="0x1501"/>
+    <enum name="XOR"                            value="0x1506"/>
+    <enum name="OR"                             value="0x1507"/>
+    <enum name="NOR"                            value="0x1508"/>
+    <enum name="EQUIV"                          value="0x1509"/>
+    <enum name="NAND"                           value="0x150E"/>
+    <enum name="REPLACE_VALUE_AMD"              value="0x874B"/>
+
+    <enum name="STENCIL_OP_VALUE_AMD"           value="0x874C"/>
+    <enum name="STENCIL_BACK_OP_VALUE_AMD"      value="0x874D"/>
+
+    <function name="StencilOpValueAMD">
+        <param name="face" type="GLenum"/>
+        <param name="value" type="GLuint"/>
+    </function>
+
+</category>
+
+</OpenGLAPI>

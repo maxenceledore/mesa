@@ -70,6 +70,9 @@ _mesa_StencilFuncSeparateATI(GLenum frontfunc, GLenum backfunc, GLint ref, GLuin
 extern void GLAPIENTRY
 _mesa_StencilMaskSeparate(GLenum face, GLuint mask);
 
+extern void GLAPIENTRY
+_mesa_StencilOpValueAMD(GLenum face, GLuint value);
+
 
 extern void
 _mesa_update_stencil(struct gl_context *ctx);

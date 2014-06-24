@@ -947,6 +947,9 @@ const struct function gl_core_functions_possible[] = {
    /* GL_ARB_buffer_storage */
    { "glBufferStorage", 43, -1 },
 
+   /* GL_AMD_stencil_operation_extended */
+   { "glStencilOpValueAMD", 10, -1 },
+
    { NULL, 0, -1 }
 };
 

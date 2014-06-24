@@ -13006,6 +13006,8 @@
 
 <xi:include href="NV_vdpau_interop.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 
+<xi:include href="AMD_stencil_operation_extended.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+
 <xi:include href="GL4x.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 
 </OpenGLAPI>

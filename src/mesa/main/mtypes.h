@@ -1057,6 +1057,7 @@ struct gl_stencil_attrib
    GLint Ref[3];		/**< Reference value */
    GLuint ValueMask[3];		/**< Value mask */
    GLuint WriteMask[3];		/**< Write mask */
+   GLuint OpSourceVal[3];	/**< Stencil operation source value */
    GLuint Clear;		/**< Clear value */
 };
 
@@ -3615,6 +3616,7 @@ struct gl_extensions
    /* vendor extensions */
    GLboolean AMD_performance_monitor;
    GLboolean AMD_seamless_cubemap_per_texture;
+   GLboolean AMD_stencil_operation_extended;
    GLboolean AMD_vertex_shader_layer;
    GLboolean APPLE_object_purgeable;
    GLboolean ATI_envmap_bumpmap;

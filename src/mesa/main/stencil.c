@@ -68,6 +68,15 @@ validate_stencil_op(struct gl_context *ctx, GLenum op)
    case GL_INCR_WRAP:
    case GL_DECR_WRAP:
       return GL_TRUE;
+   case GL_SET_AMD:
+   case GL_AND:
+   case GL_XOR:
+   case GL_OR:
+   case GL_NOR:
+   case GL_EQUIV:
+   case GL_NAND:
+   case GL_REPLACE_VALUE_AMD:
+      return ctx->Extensions.AMD_stencil_operation_extended;
    default:
       return GL_FALSE;
    }
@@ -517,6 +526,41 @@ _mesa_StencilMaskSeparate(GLenum face, GLuint mask)
 }
 
 
+
+void GLAPIENTRY
+_mesa_StencilOpValueAMD(GLenum face, GLuint value)
+{
+   GET_CURRENT_CONTEXT(ctx);
+   GLuint ActiveFace = (face == GL_FRONT) ? 0 : 2;
+
+   if (MESA_VERBOSE & VERBOSE_API)
+      _mesa_debug(ctx, "glStencilOpValueAMD()\n");
+
+   if (face != GL_FRONT && face != GL_BACK && face != GL_FRONT_AND_BACK) {
+      _mesa_error(ctx, GL_INVALID_ENUM, "glStencilOpValueAMD(face)");
+      return;
+   }
+
+   /* Dependencies on OpenGL 2.0
+    * 
+    * If the GL version is less than 2.0, remove all references to
+    * StencilOpSeparate. 
+    * Furthermore, the <face> parameter to StencilOpValueAMD must 
+    * be FRONT_AND_BACK, otherwise an INVALID_ENUM error will be generated.
+    */
+   if (ctx->Version < 20 && face != GL_FRONT_AND_BACK) {
+      _mesa_error(ctx, GL_INVALID_ENUM, "glStencilOpValueAMD(face)");
+       return;
+   }
+
+   if(ctx->Stencil.OpSourceVal[ActiveFace] == value)
+      return;
+
+   FLUSH_VERTICES(ctx, _NEW_STENCIL);
+   ctx->Stencil.OpSourceVal[ActiveFace] = value;
+}
+
+
 /**
  * Update derived stencil state.
  */
@@ -536,7 +580,8 @@ _mesa_update_stencil(struct gl_context *ctx)
 	ctx->Stencil.ZFailFunc[0] != ctx->Stencil.ZFailFunc[face] ||
 	ctx->Stencil.Ref[0] != ctx->Stencil.Ref[face] ||
 	ctx->Stencil.ValueMask[0] != ctx->Stencil.ValueMask[face] ||
-	ctx->Stencil.WriteMask[0] != ctx->Stencil.WriteMask[face]);
+	ctx->Stencil.WriteMask[0] != ctx->Stencil.WriteMask[face] ||
+	ctx->Stencil.OpSourceVal[0] != ctx->Stencil.OpSourceVal[face]);
 
    ctx->Stencil._WriteEnabled =
       ctx->Stencil._Enabled &&
@@ -581,4 +626,7 @@ _mesa_init_stencil(struct gl_context *ctx)
    ctx->Stencil.WriteMask[2] = ~0U;
    ctx->Stencil.Clear = 0;
    ctx->Stencil._BackFace = 1;
+   ctx->Stencil.OpSourceVal[0] = 1;
+   ctx->Stencil.OpSourceVal[1] = 1;
+   ctx->Stencil.OpSourceVal[2] = 1;
 }
