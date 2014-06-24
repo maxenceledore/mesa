@@ -301,8 +301,20 @@ nvc0_rasterizer_state_create(struct pipe_context *pipe,
         SB_DATA    (so, fui(cso->offset_clamp));
     }
 
-    if (cso->depth_clip_near)
+    if (cso->depth_clip_near && cso->depth_clip_far)
        reg = NVC0_3D_VIEW_VOLUME_CLIP_CTRL_UNK1_UNK1;
+
+    else if(!cso->depth_clip_near && cso->depth_clip_far)
+       reg =
+          NVC0_3D_VIEW_VOLUME_CLIP_CTRL_UNK1_UNK1 |
+          NVC0_3D_VIEW_VOLUME_CLIP_CTRL_DEPTH_CLAMP_NEAR |
+          NVC0_3D_VIEW_VOLUME_CLIP_CTRL_UNK12_UNK2;
+
+    else if(cso->depth_clip_near && !cso->depth_clip_far)
+       reg =
+          NVC0_3D_VIEW_VOLUME_CLIP_CTRL_UNK1_UNK1 |
+          NVC0_3D_VIEW_VOLUME_CLIP_CTRL_DEPTH_CLAMP_FAR |
+          NVC0_3D_VIEW_VOLUME_CLIP_CTRL_UNK12_UNK2;
     else
        reg =
           NVC0_3D_VIEW_VOLUME_CLIP_CTRL_UNK1_UNK1 |
