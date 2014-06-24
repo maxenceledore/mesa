@@ -466,9 +466,9 @@ generate_fs_loop(struct gallivm_state *gallivm,
          z = LLVMBuildLoad(builder, outputs[pos0][2], "output.z");
 
          /*
-          * Clamp according to ARB_depth_clamp semantics.
+          * Clamp according to ARB_depth_clamp/ARB_depth_clamp_separate semantics.
           */
-         if (key->depth_clamp) {
+         if (key->depth_clamp_near || key->depth_clamp_far) {
             LLVMValueRef viewport, min_depth, max_depth;
             LLVMValueRef viewport_index;
             struct lp_build_context f32_bld;
@@ -506,8 +506,16 @@ generate_fs_loop(struct gallivm_state *gallivm,
 
             /*
              * Clamp to the min and max depth values for the given viewport.
+             * (if both near and far require clamping)
              */
-            z = lp_build_clamp(&f32_bld, z, min_depth, max_depth);
+            if(key->depth_clamp_near && key->depth_clamp_far)
+              z = lp_build_clamp(&f32_bld, z, min_depth, max_depth);
+
+            else if(key->depth_clamp_near) {
+              z = lp_build_max(&f32_bld, z, min_depth);
+            }
+            else
+              z = lp_build_min(&f32_bld, z, max_depth);
          }
       }
 
@@ -2938,9 +2946,11 @@ make_variant_key(struct llvmpipe_context *lp,
     * When clip_halfz is enabled, then always clamp the depth values.
     */
    if (lp->rasterizer->clip_halfz) {
-      key->depth_clamp = 1;
+      key->depth_clamp_near = 1;
+      key->depth_clamp_far = 1;
    } else {
-      key->depth_clamp = (lp->rasterizer->depth_clip_near == 0) ? 1 : 0;
+      key->depth_clamp_near = (lp->rasterizer->depth_clip_near == 0) ? 1 : 0;
+      key->depth_clamp_far = (lp->rasterizer->depth_clip_far == 0) ? 1 : 0;
    }
 
    /* alpha test only applies if render buffer 0 is non-integer (or does not exist) */

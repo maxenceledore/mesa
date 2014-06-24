@@ -236,6 +236,8 @@ llvmpipe_get_param(struct pipe_screen *screen, enum pipe_cap param)
       return PIPE_MAX_VIEWPORTS;
    case PIPE_CAP_ENDIANNESS:
       return PIPE_ENDIAN_NATIVE;
+   case PIPE_CAP_DEPTH_CLIP_SEPARATE_DISABLE:
+      return 1;
    case PIPE_CAP_TGSI_VS_LAYER:
    case PIPE_CAP_MAX_TEXTURE_GATHER_COMPONENTS:
    case PIPE_CAP_TEXTURE_GATHER_SM5:
@@ -244,7 +246,6 @@ llvmpipe_get_param(struct pipe_screen *screen, enum pipe_cap param)
    case PIPE_CAP_SAMPLE_SHADING:
    case PIPE_CAP_TEXTURE_GATHER_OFFSETS:
    case PIPE_CAP_TGSI_VS_WINDOW_SPACE_POSITION:
-   case PIPE_CAP_DEPTH_CLIP_SEPARATE_DISABLE:
       return 0;
    case PIPE_CAP_FAKE_SW_MSAA:
 	return 1;
