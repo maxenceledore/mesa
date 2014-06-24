@@ -559,7 +559,7 @@ ilo_gpe_init_rasterizer_clip(const struct ilo_dev_info *dev,
    else
       dw2 |= GEN6_CLIP_DW2_APIMODE_OGL;
 
-   if (state->depth_clip)
+   if (state->depth_clip_near)
       dw2 |= GEN6_CLIP_DW2_Z_TEST_ENABLE;
 
    if (state->flatshade_first) {

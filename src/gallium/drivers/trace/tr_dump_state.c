@@ -142,7 +142,7 @@ void trace_dump_rasterizer_state(const struct pipe_rasterizer_state *state)
 
    trace_dump_member(bool, state, rasterizer_discard);
 
-   trace_dump_member(bool, state, depth_clip);
+   trace_dump_member(bool, state, depth_clip_near);
 
    trace_dump_member(bool, state, clip_halfz);
 

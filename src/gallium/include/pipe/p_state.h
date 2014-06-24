@@ -126,7 +126,8 @@ struct pipe_rasterizer_state
     * clamped later at the per-pixel level before depth testing.
     * This depends on PIPE_CAP_DEPTH_CLIP_DISABLE.
     */
-   unsigned depth_clip:1;
+   unsigned depth_clip_near:1;
+   unsigned depth_clip_far:1;
 
    /**
     * When true clip space in the z axis goes from [0..1] (D3D).  When false

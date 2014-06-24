@@ -1178,7 +1178,8 @@ struct renderer * renderer_create(struct vg_context *owner)
    memset(raster, 0, sizeof(*raster));
    raster->half_pixel_center = 1;
    raster->bottom_edge_rule = 1;
-   raster->depth_clip = 1;
+   raster->depth_clip_near = 1;
+   raster->depth_clip_far = 1;
    cso_set_rasterizer(renderer->cso, raster);
 
    /* fixed at 0 */
