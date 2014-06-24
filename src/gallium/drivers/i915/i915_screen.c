@@ -282,6 +282,9 @@ i915_get_param(struct pipe_screen *screen, enum pipe_cap cap)
    case PIPE_CAP_ENDIANNESS:
       return PIPE_ENDIAN_LITTLE;
 
+   case PIPE_CAP_DEPTH_CLIP_SEPARATE_DISABLE:
+      return 0;
+
    default:
       debug_printf("%s: Unknown cap %u.\n", __FUNCTION__, cap);
       return 0;
