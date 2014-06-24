@@ -59,6 +59,7 @@ struct pipe_sampler_view;
 struct pipe_scissor_state;
 struct pipe_shader_state;
 struct pipe_stencil_ref;
+struct pipe_stencil_operation_source_value;
 struct pipe_stream_output_target;
 struct pipe_surface;
 struct pipe_transfer;
@@ -186,6 +187,9 @@ struct pipe_context {
 
    void (*set_stencil_ref)( struct pipe_context *,
                             const struct pipe_stencil_ref * );
+
+   void (*set_stencil_operation_source_value)( struct pipe_context *,
+                            const struct pipe_stencil_operation_source_value * );
 
    void (*set_sample_mask)( struct pipe_context *,
                             unsigned sample_mask );
