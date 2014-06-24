@@ -289,6 +289,11 @@ struct pipe_stencil_ref
    ubyte ref_value[2];
 };
 
+struct pipe_stencil_op_src_val
+{
+   ubyte op_src_value[2];
+};
+
 struct pipe_framebuffer_state
 {
    unsigned width, height;

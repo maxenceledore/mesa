@@ -173,6 +173,11 @@ void cso_set_stencil_ref(struct cso_context *cso,
 void cso_save_stencil_ref(struct cso_context *cso);
 void cso_restore_stencil_ref(struct cso_context *cso);
 
+void cso_set_stencil_op_src_value(struct cso_context *cso,
+                         const struct pipe_stencil_op_src_val *sosv);
+void cso_save_stencil_op_src_value(struct cso_context *cso);
+void cso_restore_stencil_op_src_value(struct cso_context *cso);
+
 void cso_set_render_condition(struct cso_context *cso,
                               struct pipe_query *query,
                               boolean condition, uint mode);

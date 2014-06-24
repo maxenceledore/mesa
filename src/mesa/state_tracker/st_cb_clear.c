@@ -347,6 +347,7 @@ clear_with_quad(struct gl_context *ctx, unsigned clear_buffers)
    /* Restore pipe state */
    cso_restore_blend(st->cso_context);
    cso_restore_stencil_ref(st->cso_context);
+   cso_restore_stencil_op_src_value(st->cso_context);
    cso_restore_depth_stencil_alpha(st->cso_context);
    cso_restore_rasterizer(st->cso_context);
    cso_restore_sample_mask(st->cso_context);

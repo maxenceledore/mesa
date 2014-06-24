@@ -122,6 +122,7 @@ struct cso_context {
    unsigned sample_mask, sample_mask_saved;
    unsigned min_samples, min_samples_saved;
    struct pipe_stencil_ref stencil_ref, stencil_ref_saved;
+   struct pipe_stencil_op_src_val stencil_op_src_val, stencil_op_src_val_saved;
 };
 
 
@@ -756,6 +757,30 @@ void cso_restore_stencil_ref(struct cso_context *ctx)
               sizeof(ctx->stencil_ref))) {
       ctx->stencil_ref = ctx->stencil_ref_saved;
       ctx->pipe->set_stencil_ref(ctx->pipe, &ctx->stencil_ref);
+   }
+}
+
+void cso_set_stencil_op_src_val(struct cso_context *ctx,
+                         const struct pipe_stencil_op_src_val *sosv)
+{
+   if (memcmp(&ctx->stencil_op_src_val, sosv, sizeof(ctx->stencil_op_src_val))) {
+      ctx->stencil_op_src_val = *sosv;
+      ctx->pipe->set_stencil_op_src_val(ctx->pipe, sosv);
+   }
+}
+
+void cso_save_stencil_op_src_val(struct cso_context *ctx)
+{
+   ctx->stencil_op_src_val_saved = ctx->stencil_op_src_val;
+}
+
+
+void cso_restore_stencil_op_src_val(struct cso_context *ctx)
+{
+   if (memcmp(&ctx->stencil_op_src_val, &ctx->stencil_op_src_val_saved,
+              sizeof(ctx->stencil_op_src_val))) {
+      ctx->stencil_op_src_val = ctx->stencil_op_src_val_saved;
+      ctx->pipe->set_stencil_op_src_val(ctx->pipe, &ctx->stencil_op_src_val);
    }
 }
 

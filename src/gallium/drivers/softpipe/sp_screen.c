@@ -197,6 +197,7 @@ softpipe_get_param(struct pipe_screen *screen, enum pipe_cap param)
       return 1;
    case PIPE_CAP_MIN_TEXTURE_GATHER_OFFSET:
    case PIPE_CAP_MAX_TEXTURE_GATHER_OFFSET:
+   case PIPE_CAP_STENCIL_OPS_EXTENDED:
       return 0;
    }
    /* should only get here on unhandled cases */

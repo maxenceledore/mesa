@@ -126,6 +126,7 @@ pp_run(struct pp_queue_t *ppq, struct pipe_resource *in,
    cso_save_samplers(cso, PIPE_SHADER_FRAGMENT);
    cso_save_sampler_views(cso, PIPE_SHADER_FRAGMENT);
    cso_save_stencil_ref(cso);
+   cso_save_stencil_op_src_value(cso);
    cso_save_stream_outputs(cso);
    cso_save_vertex_elements(cso);
    cso_save_vertex_shader(cso);
@@ -193,6 +194,7 @@ pp_run(struct pp_queue_t *ppq, struct pipe_resource *in,
    cso_restore_samplers(cso, PIPE_SHADER_FRAGMENT);
    cso_restore_sampler_views(cso, PIPE_SHADER_FRAGMENT);
    cso_restore_stencil_ref(cso);
+   cso_restore_stencil_op_src_value(cso);
    cso_restore_stream_outputs(cso);
    cso_restore_vertex_elements(cso);
    cso_restore_vertex_shader(cso);

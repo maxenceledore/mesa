@@ -86,6 +86,7 @@ pp_jimenezmlaa_run(struct pp_queue_t *ppq, struct pipe_resource *in,
    unsigned int h = 0;
 
    const struct pipe_stencil_ref ref = { {1} };
+   const struct pipe_stencil_op_src_val opval = { {1} };
 
    /* Insufficient initialization checks. */
    assert(p);
@@ -101,6 +102,7 @@ pp_jimenezmlaa_run(struct pp_queue_t *ppq, struct pipe_resource *in,
    memset(&mstencil, 0, sizeof(mstencil));
 
    cso_set_stencil_ref(p->cso, &ref);
+   cso_set_stencil_op_src_value(p->cso, &opval);
 
    /* Init the pixel size constant */
    if (dimensions[0] != p->framebuffer.width ||

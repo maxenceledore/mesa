@@ -89,6 +89,22 @@ gl_stencil_op_to_pipe(GLenum func)
       return PIPE_STENCIL_OP_DECR_WRAP;
    case GL_INVERT:
       return PIPE_STENCIL_OP_INVERT;
+   case GL_SET_AMD:
+      return PIPE_STENCIL_OP_SET;
+   case GL_AND:
+      return PIPE_STENCIL_OP_AND;
+   case GL_XOR:
+      return PIPE_STENCIL_OP_XOR;
+   case GL_OR:
+      return PIPE_STENCIL_OP_OR;
+   case GL_NOR:
+      return PIPE_STENCIL_OP_NOR;
+   case GL_EQUIV:
+      return PIPE_STENCIL_OP_EQUIV;
+   case GL_NAND:
+      return PIPE_STENCIL_OP_NAND;
+   case GL_REPLACE_VALUE_AMD:
+      return PIPE_STENCIL_OP_REPLACE_VALUE;
    default:
       assert("invalid GL token in gl_stencil_op_to_pipe()" == NULL);
       return 0;
@@ -100,6 +116,7 @@ update_depth_stencil_alpha(struct st_context *st)
 {
    struct pipe_depth_stencil_alpha_state *dsa = &st->state.depth_stencil;
    struct pipe_stencil_ref sr;
+   struct pipe_stencil_op_src_val sosv;
    struct gl_context *ctx = st->ctx;
 
    memset(dsa, 0, sizeof(*dsa));
@@ -120,6 +137,7 @@ update_depth_stencil_alpha(struct st_context *st)
       dsa->stencil[0].valuemask = ctx->Stencil.ValueMask[0] & 0xff;
       dsa->stencil[0].writemask = ctx->Stencil.WriteMask[0] & 0xff;
       sr.ref_value[0] = _mesa_get_stencil_ref(ctx, 0);
+      sosv.op_src_value[0] = _mesa_get_stencil_op_source_value(ctx, 0);
 
       if (ctx->Stencil._TestTwoSide) {
          const GLuint back = ctx->Stencil._BackFace;
@@ -131,6 +149,7 @@ update_depth_stencil_alpha(struct st_context *st)
          dsa->stencil[1].valuemask = ctx->Stencil.ValueMask[back] & 0xff;
          dsa->stencil[1].writemask = ctx->Stencil.WriteMask[back] & 0xff;
          sr.ref_value[1] = _mesa_get_stencil_ref(ctx, back);
+         sosv.op_src_value[1] = _mesa_get_stencil_op_source_value(ctx, back);
       }
       else {
          /* This should be unnecessary. Drivers must not expect this to
@@ -150,6 +169,7 @@ update_depth_stencil_alpha(struct st_context *st)
 
    cso_set_depth_stencil_alpha(st->cso_context, dsa);
    cso_set_stencil_ref(st->cso_context, &sr);
+   cso_set_stencil_op_src_value(st->cso_context, &sosv);
 }
 
 
