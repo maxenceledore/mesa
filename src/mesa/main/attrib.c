@@ -314,7 +314,8 @@ _mesa_PushAttrib(GLbitfield mask)
       attr->ClipPlanes = ctx->Transform.ClipPlanesEnabled;
       attr->ColorMaterial = ctx->Light.ColorMaterialEnabled;
       attr->CullFace = ctx->Polygon.CullFlag;
-      attr->DepthClamp = ctx->Transform.DepthClamp;
+      attr->DepthClamp.Near = ctx->Transform.DepthClamp.Near;
+      attr->DepthClamp.Far = ctx->Transform.DepthClamp.Far;
       attr->DepthTest = ctx->Depth.Test;
       attr->Dither = ctx->Color.DitherFlag;
       attr->Fog = ctx->Fog.Enabled;
@@ -590,7 +591,7 @@ pop_enable_group(struct gl_context *ctx, const struct gl_enable_attrib *enable)
    TEST_AND_UPDATE(ctx->Light.ColorMaterialEnabled, enable->ColorMaterial,
                    GL_COLOR_MATERIAL);
    TEST_AND_UPDATE(ctx->Polygon.CullFlag, enable->CullFace, GL_CULL_FACE);
-   TEST_AND_UPDATE(ctx->Transform.DepthClamp, enable->DepthClamp,
+   TEST_AND_UPDATE(ctx->Transform.DepthClamp.Near, enable->DepthClamp.Near,
 		   GL_DEPTH_CLAMP);
    TEST_AND_UPDATE(ctx->Depth.Test, enable->DepthTest, GL_DEPTH_TEST);
    TEST_AND_UPDATE(ctx->Color.DitherFlag, enable->Dither, GL_DITHER);
@@ -1342,9 +1343,9 @@ _mesa_PopAttrib(void)
                if (xform->RescaleNormals != ctx->Transform.RescaleNormals)
                   _mesa_set_enable(ctx, GL_RESCALE_NORMAL_EXT,
                                    ctx->Transform.RescaleNormals);
-               if (xform->DepthClamp != ctx->Transform.DepthClamp)
+               if (xform->DepthClamp.Near != ctx->Transform.DepthClamp.Near)
                   _mesa_set_enable(ctx, GL_DEPTH_CLAMP,
-                                   ctx->Transform.DepthClamp);
+                                   ctx->Transform.DepthClamp.Near);
             }
             break;
          case GL_TEXTURE_BIT:

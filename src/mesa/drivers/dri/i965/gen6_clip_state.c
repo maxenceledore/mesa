@@ -77,7 +77,9 @@ upload_clip_state(struct brw_context *brw)
       }
    }
 
-   if (brw->gen < 8 && !ctx->Transform.DepthClamp)
+   if (brw->gen < 8 &&
+      !ctx->Transform.DepthClamp.Near &&
+      !ctx->Transform.DepthClamp.Far)
       dw2 |= GEN6_CLIP_Z_TEST;
 
    /* _NEW_LIGHT */

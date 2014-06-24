@@ -143,7 +143,8 @@ brw_upload_clip_unit(struct brw_context *brw)
    }
 
    /* _NEW_TRANSFORM */
-   if (!ctx->Transform.DepthClamp)
+   if (!ctx->Transform.DepthClamp.Near &&
+       !ctx->Transform.DepthClamp.Far)
       clip->clip5.viewport_z_clip_enable = 1;
    clip->clip5.viewport_xy_clip_enable = 1;
    clip->clip5.vertex_position_space = BRW_CLIP_NDCSPACE;

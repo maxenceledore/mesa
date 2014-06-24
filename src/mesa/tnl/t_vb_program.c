@@ -144,7 +144,7 @@ do_ndc_cliptest(struct gl_context *ctx, struct vp_stage_data *store)
                                             store->clipmask,
                                             &store->ormask,
                                             &store->andmask,
-					    !ctx->Transform.DepthClamp );
+					    !ctx->Transform.DepthClamp.Near );
    }
    else {
       VB->NdcPtr = NULL;
@@ -153,7 +153,7 @@ do_ndc_cliptest(struct gl_context *ctx, struct vp_stage_data *store)
                                             store->clipmask,
                                             &store->ormask,
                                             &store->andmask,
-					    !ctx->Transform.DepthClamp );
+					    !ctx->Transform.DepthClamp.Near );
    }
 
    if (store->andmask) {

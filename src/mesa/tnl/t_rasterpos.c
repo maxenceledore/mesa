@@ -384,7 +384,8 @@ _tnl_RasterPos(struct gl_context *ctx, const GLfloat vObj[4])
       TRANSFORM_POINT( clip, ctx->ProjectionMatrixStack.Top->m, eye );
 
       /* clip to view volume. */
-      if (!ctx->Transform.DepthClamp) {
+      if (!ctx->Transform.DepthClamp.Near &&
+          !ctx->Transform.DepthClamp.Far) {
          if (viewclip_point_z(clip) == 0) {
             ctx->Current.RasterPosValid = GL_FALSE;
             return;
@@ -418,7 +419,8 @@ _tnl_RasterPos(struct gl_context *ctx, const GLfloat vObj[4])
                                   / ctx->DrawBuffer->_DepthMaxF;
       ctx->Current.RasterPos[3] = clip[3];
 
-      if (ctx->Transform.DepthClamp) {
+      if (ctx->Transform.DepthClamp.Near &&
+          ctx->Transform.DepthClamp.Far) {
 	 ctx->Current.RasterPos[3] = CLAMP(ctx->Current.RasterPos[3],
 					   ctx->ViewportArray[0].Near,
 					   ctx->ViewportArray[0].Far);

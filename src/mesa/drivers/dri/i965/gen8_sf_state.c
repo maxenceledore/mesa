@@ -265,7 +265,8 @@ upload_raster(struct brw_context *brw)
       dw1 |= GEN8_RASTER_SCISSOR_ENABLE;
 
    /* _NEW_TRANSFORM */
-   if (!ctx->Transform.DepthClamp)
+   if (!ctx->Transform.DepthClamp.Near &&
+       !ctx->Transform.DepthClamp.Far)
       dw1 |= GEN8_RASTER_VIEWPORT_Z_CLIP_TEST_ENABLE;
 
    BEGIN_BATCH(5);

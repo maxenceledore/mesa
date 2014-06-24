@@ -920,10 +920,12 @@ _mesa_set_enable(struct gl_context *ctx, GLenum cap, GLboolean state)
          if (!_mesa_is_desktop_gl(ctx))
             goto invalid_enum_error;
 	 CHECK_EXTENSION(ARB_depth_clamp, cap);
-         if (ctx->Transform.DepthClamp == state)
+         if (ctx->Transform.DepthClamp.Near == state &&
+             ctx->Transform.DepthClamp.Far == state)
             return;
          FLUSH_VERTICES(ctx, _NEW_TRANSFORM);
-	 ctx->Transform.DepthClamp = state;
+	 ctx->Transform.DepthClamp.Near = state;
+	 ctx->Transform.DepthClamp.Far = state;
 	 break;
 
       case GL_FRAGMENT_SHADER_ATI:
@@ -1009,6 +1011,27 @@ _mesa_set_enable(struct gl_context *ctx, GLenum cap, GLboolean state)
          FLUSH_VERTICES(ctx, _NEW_MULTISAMPLE);
          ctx->Multisample.SampleMask = state;
          break;
+
+      /* AMD_depth_clamp_separate */
+      case GL_DEPTH_CLAMP_NEAR_AMD:
+         if (!_mesa_is_desktop_gl(ctx))
+            goto invalid_enum_error;
+	 CHECK_EXTENSION(AMD_depth_clamp_separate, cap);
+         if (ctx->Transform.DepthClamp.Near == state)
+            return;
+         FLUSH_VERTICES(ctx, _NEW_TRANSFORM);
+	 ctx->Transform.DepthClamp.Near = state;
+	 break;
+
+      case GL_DEPTH_CLAMP_FAR_AMD:
+         if (!_mesa_is_desktop_gl(ctx))
+            goto invalid_enum_error;
+	 CHECK_EXTENSION(AMD_depth_clamp_separate, cap);
+         if (ctx->Transform.DepthClamp.Far == state)
+            return;
+         FLUSH_VERTICES(ctx, _NEW_TRANSFORM);
+	 ctx->Transform.DepthClamp.Far = state;
+	 break;
 
       default:
          goto invalid_enum_error;
@@ -1547,7 +1570,7 @@ _mesa_IsEnabled( GLenum cap )
          if (!_mesa_is_desktop_gl(ctx))
             goto invalid_enum_error;
          CHECK_EXTENSION(ARB_depth_clamp);
-         return ctx->Transform.DepthClamp;
+         return (ctx->Transform.DepthClamp.Near || ctx->Transform.DepthClamp.Far);
 
       case GL_FRAGMENT_SHADER_ATI:
          if (ctx->API != API_OPENGL_COMPAT)
@@ -1614,6 +1637,19 @@ _mesa_IsEnabled( GLenum cap )
             goto invalid_enum_error;
          CHECK_EXTENSION(ARB_sample_shading);
          return ctx->Multisample.SampleShading;
+
+      /* GL_AMD_depth_clamp_separate */
+      case GL_DEPTH_CLAMP_NEAR_AMD:
+         if (!_mesa_is_desktop_gl(ctx))
+            goto invalid_enum_error;
+         CHECK_EXTENSION(AMD_depth_clamp_separate);
+         return ctx->Transform.DepthClamp.Near;
+
+      case GL_DEPTH_CLAMP_FAR_AMD:
+         if (!_mesa_is_desktop_gl(ctx))
+            goto invalid_enum_error;
+         CHECK_EXTENSION(AMD_depth_clamp_separate);
+         return ctx->Transform.DepthClamp.Far;
 
       default:
          goto invalid_enum_error;

@@ -50,7 +50,8 @@ brw_upload_cc_vp(struct brw_context *brw)
 
    /* _NEW_TRANSFORM */
    for (unsigned i = 0; i < ctx->Const.MaxViewports; i++) {
-      if (ctx->Transform.DepthClamp) {
+      if (ctx->Transform.DepthClamp.Near ||
+          ctx->Transform.DepthClamp.Far) {
          /* _NEW_VIEWPORT */
          ccv[i].min_depth = MIN2(ctx->ViewportArray[i].Near,
                                  ctx->ViewportArray[i].Far);

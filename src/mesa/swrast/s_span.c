@@ -1216,7 +1216,7 @@ _swrast_write_rgba_span( struct gl_context *ctx, SWspan *span)
       if (!(span->arrayMask & SPAN_Z))
          _swrast_span_interpolate_z(ctx, span);
 
-      if (ctx->Transform.DepthClamp)
+      if (ctx->Transform.DepthClamp.Near)
 	 _swrast_depth_clamp_span(ctx, span);
 
       if (ctx->Stencil._Enabled) {
