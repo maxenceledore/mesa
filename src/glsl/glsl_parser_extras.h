@@ -437,6 +437,8 @@ struct _mesa_glsl_parse_state {
    bool AMD_conservative_depth_warn;
    bool AMD_shader_stencil_export_enable;
    bool AMD_shader_stencil_export_warn;
+   bool AMD_shader_stencil_value_export_enable;
+   bool AMD_shader_stencil_value_export_warn;
    bool AMD_shader_trinary_minmax_enable;
    bool AMD_shader_trinary_minmax_warn;
    bool AMD_vertex_shader_layer_enable;

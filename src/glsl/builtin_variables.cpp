@@ -922,6 +922,13 @@ builtin_variable_generator::generate_fs_special_vars()
          var->warn_extension = "GL_AMD_shader_stencil_export";
    }
 
+   if (state->AMD_shader_stencil_value_export_enable) {
+      ir_variable *const var =
+         add_output(FRAG_RESULT_STENCIL_OP_VALUE, int_t, "gl_FragStencilValueAMD");
+      if (state->ARB_shader_stencil_export_warn)
+         var->warn_extension = "GL_AMD_shader_stencil_value_export";
+   }
+
    if (state->ARB_sample_shading_enable) {
       add_system_value(SYSTEM_VALUE_SAMPLE_ID, int_t, "gl_SampleID");
       add_system_value(SYSTEM_VALUE_SAMPLE_POS, vec2_t, "gl_SamplePosition");

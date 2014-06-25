@@ -549,6 +549,7 @@ static const _mesa_glsl_extension _mesa_glsl_supported_extensions[] = {
     */
    EXT(AMD_conservative_depth,         true,  false,     ARB_conservative_depth),
    EXT(AMD_shader_stencil_export,      true,  false,     ARB_shader_stencil_export),
+   EXT(ARB_shader_stencil_value_export,true,  false,     ARB_shader_stencil_value_export),
    EXT(AMD_shader_trinary_minmax,      true,  false,     dummy_true),
    EXT(AMD_vertex_shader_layer,        true,  false,     AMD_vertex_shader_layer),
    EXT(EXT_separate_shader_objects,    false, true,      dummy_true),
