@@ -317,6 +317,7 @@ typedef enum
     */
    FRAG_RESULT_COLOR = 2,
    FRAG_RESULT_SAMPLE_MASK = 3,
+   FRAG_RESULT_STENCIL_OP_VALUE = 4,
 
    /* FRAG_RESULT_DATAn are the per-render-target (GLSL gl_FragData[n]
     * or ARB_fragment_program fragment.color[n]) color results.  If
@@ -3617,6 +3618,7 @@ struct gl_extensions
    GLboolean AMD_performance_monitor;
    GLboolean AMD_seamless_cubemap_per_texture;
    GLboolean AMD_stencil_operation_extended;
+   GLboolean AMD_stencil_value_export;
    GLboolean AMD_vertex_shader_layer;
    GLboolean APPLE_object_purgeable;
    GLboolean ATI_envmap_bumpmap;

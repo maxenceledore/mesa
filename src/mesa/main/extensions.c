@@ -319,6 +319,7 @@ static const struct extension extension_table[] = {
    { "GL_AMD_performance_monitor",                 o(AMD_performance_monitor),                 GL,             2007 },
    { "GL_AMD_seamless_cubemap_per_texture",        o(AMD_seamless_cubemap_per_texture),        GL,             2009 },
    { "GL_AMD_shader_stencil_export",               o(ARB_shader_stencil_export),               GL,             2009 },
+   { "GL_AMD_stencil_value_export",                o(AMD_stencil_value_export),                GL,             2010 },
    { "GL_AMD_shader_trinary_minmax",               o(dummy_true),                              GL,             2012 },
    { "GL_AMD_stencil_operation_extended",          o(AMD_stencil_operation_extended),          GL,             2012 },
    { "GL_AMD_vertex_shader_layer",                 o(AMD_vertex_shader_layer),                 GLC,            2012 },

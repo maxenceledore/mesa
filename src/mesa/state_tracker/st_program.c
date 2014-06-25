@@ -679,6 +679,14 @@ st_translate_fragment_program(struct st_context *st,
          outputsWritten &= ~(1 << FRAG_RESULT_STENCIL);
       }
 
+      if (outputsWritten & BITFIELD64_BIT(FRAG_RESULT_STENCIL_OP_VALUE)) {
+         fs_output_semantic_name[fs_num_outputs] = TGSI_SEMANTIC_STENCIL_OP_VALUE;
+         fs_output_semantic_index[fs_num_outputs] = 0;
+         outputMapping[FRAG_RESULT_STENCIL_OP_VALUE] = fs_num_outputs;
+         fs_num_outputs++;
+         outputsWritten &= ~(1 << FRAG_RESULT_STENCIL_OP_VALUE);
+      }
+
       if (outputsWritten & BITFIELD64_BIT(FRAG_RESULT_SAMPLE_MASK)) {
          fs_output_semantic_name[fs_num_outputs] = TGSI_SEMANTIC_SAMPLEMASK;
          fs_output_semantic_index[fs_num_outputs] = 0;
@@ -693,6 +701,7 @@ st_translate_fragment_program(struct st_context *st,
             switch (attr) {
             case FRAG_RESULT_DEPTH:
             case FRAG_RESULT_STENCIL:
+            case FRAG_RESULT_STENCIL_OP_VALUE:
             case FRAG_RESULT_SAMPLE_MASK:
                /* handled above */
                assert(0);
