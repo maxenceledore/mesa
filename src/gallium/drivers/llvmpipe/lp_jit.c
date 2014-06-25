@@ -156,6 +156,8 @@ lp_jit_create_types(struct lp_fragment_shader_variant *lp)
       elem_types[LP_JIT_CTX_ALPHA_REF] = LLVMFloatTypeInContext(lc);
       elem_types[LP_JIT_CTX_STENCIL_REF_FRONT] =
       elem_types[LP_JIT_CTX_STENCIL_REF_BACK] = LLVMInt32TypeInContext(lc);
+      elem_types[LP_JIT_CTX_STENCIL_OP_SRC_FRONT] =
+      elem_types[LP_JIT_CTX_STENCIL_OP_SRC_BACK] = LLVMInt32TypeInContext(lc);
       elem_types[LP_JIT_CTX_U8_BLEND_COLOR] = LLVMPointerType(LLVMInt8TypeInContext(lc), 0);
       elem_types[LP_JIT_CTX_F_BLEND_COLOR] = LLVMPointerType(LLVMFloatTypeInContext(lc), 0);
       elem_types[LP_JIT_CTX_VIEWPORTS] = LLVMPointerType(viewport_type, 0);
@@ -182,6 +184,12 @@ lp_jit_create_types(struct lp_fragment_shader_variant *lp)
       LP_CHECK_MEMBER_OFFSET(struct lp_jit_context, stencil_ref_back,
                              gallivm->target, context_type,
                              LP_JIT_CTX_STENCIL_REF_BACK);
+      LP_CHECK_MEMBER_OFFSET(struct lp_jit_context, stencil_op_src_front,
+                             gallivm->target, context_type,
+                             LP_JIT_CTX_STENCIL_OP_SRC_FRONT);
+      LP_CHECK_MEMBER_OFFSET(struct lp_jit_context, stencil_op_src_back,
+                             gallivm->target, context_type,
+                             LP_JIT_CTX_STENCIL_OP_SRC_BACK);
       LP_CHECK_MEMBER_OFFSET(struct lp_jit_context, u8_blend_color,
                              gallivm->target, context_type,
                              LP_JIT_CTX_U8_BLEND_COLOR);

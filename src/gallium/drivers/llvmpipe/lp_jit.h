@@ -126,6 +126,7 @@ struct lp_jit_context
    float alpha_ref_value;
 
    uint32_t stencil_ref_front, stencil_ref_back;
+   uint32_t stencil_op_src_front, stencil_op_src_back;
 
    uint8_t *u8_blend_color;
    float *f_blend_color;
@@ -147,6 +148,8 @@ enum {
    LP_JIT_CTX_ALPHA_REF,
    LP_JIT_CTX_STENCIL_REF_FRONT,
    LP_JIT_CTX_STENCIL_REF_BACK,
+   LP_JIT_CTX_STENCIL_OP_SRC_FRONT,
+   LP_JIT_CTX_STENCIL_OP_SRC_BACK,
    LP_JIT_CTX_U8_BLEND_COLOR,
    LP_JIT_CTX_F_BLEND_COLOR,
    LP_JIT_CTX_VIEWPORTS,
@@ -170,6 +173,12 @@ enum {
 
 #define lp_jit_context_stencil_ref_back_value(_gallivm, _ptr) \
    lp_build_struct_get(_gallivm, _ptr, LP_JIT_CTX_STENCIL_REF_BACK, "stencil_ref_back")
+
+#define lp_jit_context_stencil_op_src_front_value(_gallivm, _ptr) \
+   lp_build_struct_get(_gallivm, _ptr, LP_JIT_CTX_STENCIL_OP_SRC_FRONT, "stencil_op_src_front")
+
+#define lp_jit_context_stencil_op_src_back_value(_gallivm, _ptr) \
+   lp_build_struct_get(_gallivm, _ptr, LP_JIT_CTX_STENCIL_OP_SRC_BACK, "stencil_op_src_back")
 
 #define lp_jit_context_u8_blend_color(_gallivm, _ptr) \
    lp_build_struct_get(_gallivm, _ptr, LP_JIT_CTX_U8_BLEND_COLOR, "u8_blend_color")
