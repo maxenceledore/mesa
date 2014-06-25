@@ -688,6 +688,7 @@ static void si_update_dsa_stencil_ref(struct si_context *sctx)
 {
 	struct si_pm4_state *pm4 = si_pm4_alloc_state(sctx);
 	struct pipe_stencil_ref *ref = &sctx->stencil_ref;
+	struct pipe_stencil_op_src_val *op_src_val = &sctx->stencil_op_src_val;
         struct si_state_dsa *dsa = sctx->queued.named.dsa;
 
         if (pm4 == NULL)
@@ -697,12 +698,12 @@ static void si_update_dsa_stencil_ref(struct si_context *sctx)
 		       S_028430_STENCILTESTVAL(ref->ref_value[0]) |
 		       S_028430_STENCILMASK(dsa->valuemask[0]) |
 		       S_028430_STENCILWRITEMASK(dsa->writemask[0]) |
-		       S_028430_STENCILOPVAL(1));
+		       S_028430_STENCILOPVAL(op_src_val->op_src_value[0]));
 	si_pm4_set_reg(pm4, R_028434_DB_STENCILREFMASK_BF,
 		       S_028434_STENCILTESTVAL_BF(ref->ref_value[1]) |
 		       S_028434_STENCILMASK_BF(dsa->valuemask[1]) |
 		       S_028434_STENCILWRITEMASK_BF(dsa->writemask[1]) |
-		       S_028434_STENCILOPVAL_BF(1));
+		       S_028434_STENCILOPVAL_BF(op_src_val->op_src_value[1]));
 
 	si_pm4_set_state(sctx, dsa_stencil_ref, pm4);
 }
@@ -739,6 +740,22 @@ static uint32_t si_translate_stencil_op(int s_op)
 		return V_02842C_STENCIL_SUB_WRAP;
 	case PIPE_STENCIL_OP_INVERT:
 		return V_02842C_STENCIL_INVERT;
+	case PIPE_STENCIL_OP_SET:
+		return V_02842C_STENCIL_ONES;
+	case PIPE_STENCIL_OP_AND:
+		return V_02842C_STENCIL_AND;
+	case PIPE_STENCIL_OP_XOR:
+		return V_02842C_STENCIL_XOR;
+	case PIPE_STENCIL_OP_OR:
+		return V_02842C_STENCIL_OR;
+	case PIPE_STENCIL_OP_NOR:
+		return V_02842C_STENCIL_NOR;
+	case PIPE_STENCIL_OP_EQUIV:
+		return V_02842C_STENCIL_XNOR;
+	case PIPE_STENCIL_OP_NAND:
+		 return V_02842C_STENCIL_NAND;
+	case PIPE_STENCIL_OP_REPLACE_VALUE:
+		return V_02842C_STENCIL_REPLACE_OP;
 	default:
 		R600_ERR("Unknown stencil op %d", s_op);
 		assert(0);
