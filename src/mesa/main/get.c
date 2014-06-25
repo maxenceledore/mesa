@@ -1019,6 +1019,14 @@ find_custom_value(struct gl_context *ctx, const struct value_desc *d, union valu
          v->value_int = 0;
       }
       break;
+   /* AMD_stencil_operation_extended */
+   case GL_STENCIL_OP_VALUE_AMD:
+      v->value_int =
+         _mesa_get_stencil_op_source_value(ctx, ctx->Stencil.ActiveFace);
+      break;
+   case GL_STENCIL_BACK_OP_VALUE_AMD:
+      v->value_int = _mesa_get_stencil_op_source_value(ctx, 1);
+      break;
    }
 }
 
