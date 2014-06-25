@@ -214,6 +214,7 @@ static int si_get_param(struct pipe_screen* pscreen, enum pipe_cap param)
 	case PIPE_CAP_BUFFER_MAP_PERSISTENT_COHERENT:
 	case PIPE_CAP_CUBE_MAP_ARRAY:
 	case PIPE_CAP_SAMPLE_SHADING:
+	case PIPE_CAP_STENCIL_OPS_EXTENDED:
 		return 1;
 
 	case PIPE_CAP_TEXTURE_MULTISAMPLE:
@@ -252,7 +253,6 @@ static int si_get_param(struct pipe_screen* pscreen, enum pipe_cap param)
 	case PIPE_CAP_FAKE_SW_MSAA:
 	case PIPE_CAP_TEXTURE_GATHER_OFFSETS:
 	case PIPE_CAP_TGSI_VS_WINDOW_SPACE_POSITION:
-	case PIPE_CAP_STENCIL_OPS_EXTENDED:
 		return 0;
 
 	case PIPE_CAP_TEXTURE_BORDER_COLOR_QUIRK:

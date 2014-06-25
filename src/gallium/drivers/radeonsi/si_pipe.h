@@ -125,6 +125,7 @@ struct si_context {
 	unsigned			pa_su_sc_mode_cntl;
 	/* for saving when using blitter */
 	struct pipe_stencil_ref		stencil_ref;
+	struct pipe_stencil_operation_source_value	stencil_op_src_val;
 	struct si_pipe_shader_selector	*ps_shader;
 	struct si_pipe_shader_selector	*gs_shader;
 	struct si_pipe_shader_selector	*vs_shader;
