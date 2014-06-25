@@ -168,6 +168,7 @@ lp_build_stencil_op_single(struct lp_build_context *bld,
                            const struct pipe_stencil_state *stencil,
                            enum stencil_op op,
                            LLVMValueRef stencilRef,
+                           LLVMValueRef stencilOpSourceVal,
                            LLVMValueRef stencilVals)
 
 {
@@ -206,24 +207,51 @@ lp_build_stencil_op_single(struct lp_build_context *bld,
       res = stencilRef;
       break;
    case PIPE_STENCIL_OP_INCR:
-      res = lp_build_add(bld, stencilVals, bld->one);
+      res = lp_build_add(bld, stencilVals, stencilOpSourceVal);
       res = lp_build_min(bld, res, max);
       break;
    case PIPE_STENCIL_OP_DECR:
-      res = lp_build_sub(bld, stencilVals, bld->one);
+      res = lp_build_sub(bld, stencilVals, stencilOpSourceVal);
       res = lp_build_max(bld, res, bld->zero);
       break;
    case PIPE_STENCIL_OP_INCR_WRAP:
-      res = lp_build_add(bld, stencilVals, bld->one);
+      res = lp_build_add(bld, stencilVals, stencilOpSourceVal);
       res = LLVMBuildAnd(builder, res, max, "");
       break;
    case PIPE_STENCIL_OP_DECR_WRAP:
-      res = lp_build_sub(bld, stencilVals, bld->one);
+      res = lp_build_sub(bld, stencilVals, stencilOpSourceVal);
       res = LLVMBuildAnd(builder, res, max, "");
       break;
    case PIPE_STENCIL_OP_INVERT:
       res = LLVMBuildNot(builder, stencilVals, "");
       res = LLVMBuildAnd(builder, res, max, "");
+      break;
+   case PIPE_STENCIL_OP_SET:
+      res = max;
+      break;
+   case PIPE_STENCIL_OP_AND:
+      res = LLVMBuildAnd(builder, res, stencilOpSourceVal, "");
+      break;
+   case PIPE_STENCIL_OP_XOR:
+      res = LLVMBuildXor(builder, res, stencilOpSourceVal, "");
+      break;
+   case PIPE_STENCIL_OP_OR:
+      res = LLVMBuildOr(builder, res, stencilOpSourceVal, "");
+      break;
+   case PIPE_STENCIL_OP_NOR:
+      res = LLVMBuildOr(builder, res, stencilOpSourceVal, "");
+      res = LLVMBuildNot(builder, res, "");
+      break;
+   case PIPE_STENCIL_OP_EQUIV:
+      res = LLVMBuildXor(builder, res, stencilOpSourceVal, "");
+      res = LLVMBuildNot(builder, res, "");
+      break;
+   case PIPE_STENCIL_OP_NAND:
+      res = LLVMBuildAnd(builder, res, stencilOpSourceVal, "");
+      res = LLVMBuildNot(builder, res, "");
+      break;
+   case PIPE_STENCIL_OP_REPLACE_VALUE:
+      res = stencilOpSourceVal;
       break;
    default:
       assert(0 && "bad stencil op mode");
@@ -242,6 +270,7 @@ lp_build_stencil_op(struct lp_build_context *bld,
                     const struct pipe_stencil_state stencil[2],
                     enum stencil_op op,
                     LLVMValueRef stencilRefs[2],
+                    LLVMValueRef stencilOpSourceVals[2],
                     LLVMValueRef stencilVals,
                     LLVMValueRef mask,
                     LLVMValueRef front_facing)
@@ -254,14 +283,16 @@ lp_build_stencil_op(struct lp_build_context *bld,
 
    /* do front face op */
    res = lp_build_stencil_op_single(bld, &stencil[0], op,
-                                     stencilRefs[0], stencilVals);
+                                     stencilRefs[0], stencilOpSourceVals[0],
+                                     stencilVals);
 
    if (stencil[1].enabled && front_facing != NULL) {
       /* do back face op */
       LLVMValueRef back_res;
 
       back_res = lp_build_stencil_op_single(bld, &stencil[1], op,
-                                            stencilRefs[1], stencilVals);
+                                            stencilRefs[1], stencilOpSourceVals[1],
+                                            stencilVals);
 
       res = lp_build_select(bld, front_facing, res, back_res);
    }
@@ -818,6 +849,7 @@ lp_build_depth_stencil_test(struct gallivm_state *gallivm,
                             const struct util_format_description *format_desc,
                             struct lp_build_mask_context *mask,
                             LLVMValueRef stencil_refs[2],
+                            LLVMValueRef stencilOpSourceVals[2],
                             LLVMValueRef z_src,
                             LLVMValueRef z_fb,
                             LLVMValueRef s_fb,
@@ -986,8 +1018,8 @@ lp_build_depth_stencil_test(struct gallivm_state *gallivm,
       {
          LLVMValueRef s_fail_mask = lp_build_andnot(&s_bld, current_mask, s_pass_mask);
          stencil_vals = lp_build_stencil_op(&s_bld, stencil, S_FAIL_OP,
-                                            stencil_refs, stencil_vals,
-                                            s_fail_mask, front_facing);
+                                            stencil_refs, stencilOpSourceVals,
+                                            stencil_vals, s_fail_mask, front_facing);
       }
    }
 
@@ -1068,13 +1100,15 @@ lp_build_depth_stencil_test(struct gallivm_state *gallivm,
          /* apply Z-fail operator */
          z_fail_mask = lp_build_andnot(&s_bld, current_mask, z_pass);
          stencil_vals = lp_build_stencil_op(&s_bld, stencil, Z_FAIL_OP,
-                                            stencil_refs, stencil_vals,
+                                            stencil_refs, stencilOpSourceVals,
+                                            stencil_vals,
                                             z_fail_mask, front_facing);
 
          /* apply Z-pass operator */
          z_pass_mask = LLVMBuildAnd(builder, current_mask, z_pass, "");
          stencil_vals = lp_build_stencil_op(&s_bld, stencil, Z_PASS_OP,
-                                            stencil_refs, stencil_vals,
+                                            stencil_refs, stencilOpSourceVals,
+                                            stencil_vals,
                                             z_pass_mask, front_facing);
       }
    }
@@ -1084,7 +1118,8 @@ lp_build_depth_stencil_test(struct gallivm_state *gallivm,
        */
       s_pass_mask = LLVMBuildAnd(builder, current_mask, s_pass_mask, "");
       stencil_vals = lp_build_stencil_op(&s_bld, stencil, Z_PASS_OP,
-                                         stencil_refs, stencil_vals,
+                                         stencil_refs, stencilOpSourceVals,
+                                         stencil_vals,
                                          s_pass_mask, front_facing);
    }
 

@@ -267,6 +267,8 @@ generate_fs_loop(struct gallivm_state *gallivm,
    LLVMValueRef z_value, s_value;
    LLVMValueRef z_fb, s_fb;
    LLVMValueRef stencil_refs[2];
+   LLVMValueRef stencilOpSourceVals[2];
+   
    LLVMValueRef outputs[PIPE_MAX_SHADER_OUTPUTS][TGSI_NUM_CHANNELS];
    struct lp_build_for_loop_state loop_state;
    struct lp_build_mask_context mask;
@@ -333,6 +335,9 @@ generate_fs_loop(struct gallivm_state *gallivm,
    stencil_refs[0] = lp_jit_context_stencil_ref_front_value(gallivm, context_ptr);
    stencil_refs[1] = lp_jit_context_stencil_ref_back_value(gallivm, context_ptr);
 
+   stencilOpSourceVals[0] = lp_jit_context_stencil_op_src_front_value(gallivm, context_ptr);
+   stencilOpSourceVals[1] = lp_jit_context_stencil_op_src_back_value(gallivm, context_ptr);
+
    vec_type = lp_build_vec_type(gallivm, type);
 
    consts_ptr = lp_jit_context_constants(gallivm, context_ptr);
@@ -390,6 +395,7 @@ generate_fs_loop(struct gallivm_state *gallivm,
                                   zs_format_desc,
                                   &mask,
                                   stencil_refs,
+                                  stencilOpSourceVals,
                                   z, z_fb, s_fb,
                                   facing,
                                   &z_value, &s_value,
@@ -523,6 +529,7 @@ generate_fs_loop(struct gallivm_state *gallivm,
                                   zs_format_desc,
                                   &mask,
                                   stencil_refs,
+                                  stencilOpSourceVals,
                                   z, z_fb, s_fb,
                                   facing,
                                   &z_value, &s_value,
