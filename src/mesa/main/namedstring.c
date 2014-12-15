@@ -154,12 +154,12 @@ _mesa_DeleteNamedStringARB(GLint namelen, const GLchar *name)
      _mesa_error(ctx, GL_INVALID_OPERATION,
                  "glGetNamedStringivARB(invalid name)");
      return;
-   }     
+   }
 
    ns = &tn->ns;
    free(ns->string);
    ns->lenght = 0;
-   ns->Type = 0x0000;
+/* ns->Type = 0x0000; */
    return;
 }
 

@@ -2698,6 +2698,7 @@ struct gl_named_string {
 struct tree_node {
    mtx_t Mutex;
 
+   GLuint hash_id; /* opaque to user. */
    GLchar * node_name;
 
    struct tree_node *parent;
@@ -3198,7 +3199,10 @@ struct gl_shared_state
    /* GL_EXT_framebuffer_object */
    struct _mesa_HashTable *RenderBuffers;
    struct _mesa_HashTable *FrameBuffers;
-
+#if 0
+   /** GL_ARB_shading_language_include */
+   struct _mesa_HashTable *tree_path;
+#endif
    /* GL_ARB_sync */
    struct set *SyncObjects;
 

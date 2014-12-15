@@ -121,6 +121,9 @@ _mesa_alloc_shared_state(struct gl_context *ctx)
 
    shared->SyncObjects = _mesa_set_create(NULL, _mesa_hash_pointer,
                                           _mesa_key_pointer_equal);
+#if 0
+   shared->tree_path = _mesa_NewHashTable();
+#endif
 
    return shared;
 }
@@ -275,6 +278,17 @@ delete_sampler_object_cb(GLuint id, void *data, void *userData)
    _mesa_reference_sampler_object(ctx, &sampObj, NULL);
 }
 
+#if 0
+/**
+ * Callback for deleting a namedstring. Called by _mesa_HashDeleteAll()
+ */
+static void
+delete_tree_node_cb(GLuint id, void *data, void *userData)
+{
+   struct gl_context *ctx = (struct gl_context *) userData;
+   struct tree_node *treenode = (struct tree_node *) data;
+}
+#endif
 
 /**
  * Deallocate a shared state object and all children structures.
@@ -319,6 +333,11 @@ free_shared_state(struct gl_context *ctx, struct gl_shared_state *shared)
    _mesa_HashDeleteAll(shared->ATIShaders, delete_fragshader_cb, ctx);
    _mesa_DeleteHashTable(shared->ATIShaders);
    _mesa_delete_ati_fragment_shader(ctx, shared->DefaultFragmentShader);
+
+#if 0
+   _mesa_HashDeleteAll(shared->NamedStrings, delete_named_string_cb, ctx);
+   _mesa_DeleteHashTable(shared->NamedStrings);
+#endif
 
    _mesa_HashDeleteAll(shared->BufferObjects, delete_bufferobj_cb, ctx);
    _mesa_DeleteHashTable(shared->BufferObjects);
