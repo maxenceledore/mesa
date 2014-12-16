@@ -3831,6 +3831,7 @@ struct gl_extensions
    GLboolean ARB_shader_precision;
    GLboolean ARB_shader_stencil_export;
    GLboolean ARB_shader_texture_lod;
+   GLboolean ARB_shading_language_include;
    GLboolean ARB_shading_language_packing;
    GLboolean ARB_shading_language_420pack;
    GLboolean ARB_shadow;
