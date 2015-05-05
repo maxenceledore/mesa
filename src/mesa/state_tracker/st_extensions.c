@@ -916,4 +916,7 @@ void st_init_extensions(struct pipe_screen *screen,
       extensions->ARB_gpu_shader_fp64 = GL_TRUE;
       extensions->ARB_vertex_attrib_64bit = GL_TRUE;
    }
+
+   if (screen->get_param(screen, PIPE_CAP_ATOMIC_COUNTERS))
+      extensions->ARB_shader_atomic_counters= GL_TRUE;
 }

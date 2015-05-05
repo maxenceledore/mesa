@@ -254,6 +254,7 @@ The integer capabilities:
   and size must be page-aligned.
 * ``PIPE_CAP_DEVICE_RESET_STATUS_QUERY``:
   Whether pipe_context::get_device_reset_status is implemented.
+* ``PIPE_CAP_ATOMIC_COUNTERS``: Whether atomic counters are supported.
 
 
 .. _pipe_capf:
