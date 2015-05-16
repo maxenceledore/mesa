@@ -623,6 +623,24 @@ util_copy_constant_buffer(struct pipe_constant_buffer *dst,
    }
 }
 
+static INLINE void
+util_copy_shader_buffer(struct pipe_shader_buffer *dst,
+                        const struct pipe_shader_buffer *src)
+{
+   if (src) {
+      pipe_resource_reference(&dst->buffer, src->buffer);
+      dst->buffer_offset = src->buffer_offset;
+      dst->buffer_size = src->buffer_size;
+      dst->user_buffer = src->user_buffer;
+   }
+   else {
+      pipe_resource_reference(&dst->buffer, NULL);
+      dst->buffer_offset = 0;
+      dst->buffer_size = 0;
+      dst->user_buffer = NULL;
+   }
+}
+
 static INLINE unsigned
 util_max_layer(const struct pipe_resource *r, unsigned level)
 {

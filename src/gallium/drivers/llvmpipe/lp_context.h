@@ -74,6 +74,7 @@ struct llvmpipe_context {
    struct pipe_stencil_ref stencil_ref;
    struct pipe_clip_state clip;
    struct pipe_constant_buffer constants[PIPE_SHADER_TYPES][LP_MAX_TGSI_CONST_BUFFERS];
+   struct pipe_shader_buffer shader_buffers[PIPE_SHADER_TYPES][PIPE_MAX_SHADER_RESOURCES];
    struct pipe_framebuffer_state framebuffer;
    struct pipe_poly_stipple poly_stipple;
    struct pipe_scissor_state scissors[PIPE_MAX_VIEWPORTS];

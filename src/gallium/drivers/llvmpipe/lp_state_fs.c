@@ -2867,6 +2867,51 @@ llvmpipe_set_constant_buffer(struct pipe_context *pipe,
 }
 
 
+static void
+llvmpipe_set_shader_buffers(struct pipe_context * pipe, unsigned shader,
+                            unsigned start_slot, unsigned count,
+                            struct pipe_shader_buffer *buffers)
+{
+  struct llvmpipe_context *llvmpipe = llvmpipe_context(pipe);
+  struct pipe_resource *sb = buffers ? buffers->buffer : NULL;
+
+  assert(start_slot + count < PIPE_MAX_SHADER_RESOURCES);
+
+   /* note: reference counting */
+   util_copy_shader_buffer(&llvmpipe->shader_buffers[shader][start_slot], buffers);
+
+   if (shader == PIPE_SHADER_VERTEX ||
+       shader == PIPE_SHADER_GEOMETRY) {
+      /* Pass the shader buffer to the 'draw' module */
+      const unsigned size = buffers ? buffers->buffer_size : 0;
+      const ubyte *data = NULL;
+
+      if (sb) {
+         data = (ubyte *) llvmpipe_resource_data(sb);
+      }
+
+      else if (buffers && buffers->user_buffer) {
+         data = (ubyte *) buffers->user_buffer;
+      }
+      else {
+         data = NULL;
+      }
+
+      if (data)
+         data += buffers->buffer_offset;
+
+      draw_set_mapped_shader_buffer(llvmpipe->draw, shader,
+                                      start_slot, data, size);
+   }
+
+  llvmpipe->dirty |= LP_NEW_SHADER_BUFFERS;
+
+   if (buffers && buffers->user_buffer) {
+      pipe_resource_reference(&sb, NULL);
+   }
+}
+
+
 /**
  * Return the blend factor equivalent to a destination alpha of one.
  */
@@ -3189,6 +3234,7 @@ llvmpipe_init_fs_funcs(struct llvmpipe_context *llvmpipe)
    llvmpipe->pipe.delete_fs_state = llvmpipe_delete_fs_state;
 
    llvmpipe->pipe.set_constant_buffer = llvmpipe_set_constant_buffer;
+   llvmpipe->pipe.set_shader_buffers = llvmpipe_set_shader_buffers;
 }
 
 /*
