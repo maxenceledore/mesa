@@ -845,6 +845,7 @@ ilo_set_sampler_views(struct pipe_context *pipe, unsigned shader,
 
 static void
 ilo_set_shader_resources(struct pipe_context *pipe,
+                         unsigned shader,
                          unsigned start, unsigned count,
                          struct pipe_surface **surfaces)
 {

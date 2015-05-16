@@ -1126,6 +1126,7 @@ nvc0_set_compute_resources(struct pipe_context *pipe,
 
 static void
 nvc0_set_shader_resources(struct pipe_context *pipe,
+                          unsigned shader,
                           unsigned start, unsigned nr,
                           struct pipe_surface **resources)
 {
