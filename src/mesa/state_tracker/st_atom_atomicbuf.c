@@ -70,8 +70,8 @@ static void st_bind_atomics(struct st_context *st,
                st->pipe, st_obj->buffer, &tmpl);
       }
 
-      st->pipe->set_shader_resources(st->pipe, shader_type,
-                                     i, 1, &st_obj->surface);
+      st->pipe->set_shader_buffers(st->pipe, shader_type,
+                                   i, 1, &st_obj->surface);
    }
 }
 

@@ -351,7 +351,7 @@ enum pipe_flush_flags
 #define PIPE_BIND_CURSOR               (1 << 11) /* mouse cursor */
 #define PIPE_BIND_CUSTOM               (1 << 12) /* state-tracker/winsys usages */
 #define PIPE_BIND_GLOBAL               (1 << 13) /* set_global_binding */
-#define PIPE_BIND_SHADER_RESOURCE      (1 << 14) /* set_shader_resources */
+#define PIPE_BIND_SHADER_BUFFER        (1 << 14) /* set_shader_buffers */
 #define PIPE_BIND_COMPUTE_RESOURCE     (1 << 15) /* set_compute_resources */
 #define PIPE_BIND_COMMAND_ARGS_BUFFER  (1 << 16) /* pipe_draw_info.indirect */
 

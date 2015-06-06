@@ -139,6 +139,14 @@ constrained to.  In the case of buffers, ``first_element`` and
 ``last_element`` specify the range within the buffer that will be used
 by the shader resource.  Writes to a shader resource are only allowed
 when the ``writable`` flag is set.
+There are 2 types of shader resources: buffers and images.
+
+Buffers are specified using the ``set_shader_buffers`` method.
+
+Images are specified using the ``set_shader_images`` method. When binding
+images, the ``level``, ``first_layer`` and ``last_layer`` pipe_image_view
+fields specify the mipmap level and the range of layers the image will be
+constrained to.
 
 Surfaces
 ^^^^^^^^
