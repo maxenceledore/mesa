@@ -462,6 +462,11 @@ tgsi_exec_get_shader_param(enum pipe_shader_cap param)
    case PIPE_SHADER_CAP_TGSI_DROUND_SUPPORTED:
    case PIPE_SHADER_CAP_TGSI_FMA_SUPPORTED:
       return 0;
+   case PIPE_SHADER_CAP_MAX_ATOMIC_BUFFERS:
+     /* more than required by OpenGL 4.2 (just one) */
+     return 8;
+   case PIPE_SHADER_CAP_MAX_ATOMIC_COUNTERS:
+     return 8;
    }
    /* if we get here, we missed a shader cap above (and should have seen
     * a compiler warning.)

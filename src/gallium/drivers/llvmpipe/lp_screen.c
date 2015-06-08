@@ -292,6 +292,8 @@ llvmpipe_get_param(struct pipe_screen *screen, enum pipe_cap param)
    case PIPE_CAP_MULTISAMPLE_Z_RESOLVE:
    case PIPE_CAP_RESOURCE_FROM_USER_MEMORY:
    case PIPE_CAP_DEVICE_RESET_STATUS_QUERY:
+   case PIPE_CAP_MAX_COUNTER_BUFFER_SIZE:
+      return 32;
    case PIPE_CAP_ATOMIC_COUNTERS:
       return 0;
    }
