@@ -647,7 +647,7 @@ ureg_DECL_resource( struct ureg_program *ureg,
       if (ureg->resource[i].index == index)
          return reg;
 
-   if (i < PIPE_MAX_SAMPLERS) {
+   if (i < PIPE_MAX_SHADER_RESOURCES) {
       ureg->resource[i].index = index;
       ureg->resource[i].target = target;
       ureg->resource[i].wr = wr;
