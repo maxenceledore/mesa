@@ -209,9 +209,6 @@ void st_init_limits(struct pipe_screen *screen,
                                           c->MaxUniformBlockSize / 4 *
                                           pc->MaxUniformBlocks);
 
-      pc->MaxAtomicCounters = MAX_ATOMIC_COUNTERS;
-      pc->MaxAtomicBuffers = 16;
-
       /* Gallium doesn't really care about local vs. env parameters so use the
        * same limits.
        */
@@ -308,6 +305,44 @@ void st_init_limits(struct pipe_screen *screen,
          c->Program[MESA_SHADER_FRAGMENT].MaxUniformBlocks;
       assert(c->MaxCombinedUniformBlocks <= MAX_COMBINED_UNIFORM_BUFFERS);
    }
+
+   c->MaxAtomicBufferSize =
+        screen->get_param(screen, PIPE_CAP_MAX_COUNTER_BUFFER_SIZE);
+
+   c->Program[MESA_SHADER_VERTEX].MaxAtomicBuffers =
+        screen->get_shader_param(screen, PIPE_SHADER_VERTEX,
+                                 PIPE_SHADER_CAP_MAX_ATOMIC_BUFFERS);
+   c->Program[MESA_SHADER_GEOMETRY].MaxAtomicBuffers =
+        screen->get_shader_param(screen, PIPE_SHADER_GEOMETRY,
+                                 PIPE_SHADER_CAP_MAX_ATOMIC_BUFFERS);
+   c->Program[MESA_SHADER_FRAGMENT].MaxAtomicBuffers =
+        screen->get_shader_param(screen, PIPE_SHADER_FRAGMENT,
+                                 PIPE_SHADER_CAP_MAX_ATOMIC_BUFFERS);
+
+   c->Program[MESA_SHADER_VERTEX].MaxAtomicCounters =
+        screen->get_shader_param(screen, PIPE_SHADER_VERTEX,
+                                 PIPE_SHADER_CAP_MAX_ATOMIC_COUNTERS);
+   c->Program[MESA_SHADER_GEOMETRY].MaxAtomicCounters =
+        screen->get_shader_param(screen, PIPE_SHADER_GEOMETRY,
+                                 PIPE_SHADER_CAP_MAX_ATOMIC_COUNTERS);
+   c->Program[MESA_SHADER_FRAGMENT].MaxAtomicCounters =
+        screen->get_shader_param(screen, PIPE_SHADER_FRAGMENT,
+                                 PIPE_SHADER_CAP_MAX_ATOMIC_COUNTERS);
+
+   c->MaxCombinedAtomicBuffers =
+        _min(c->Program[MESA_SHADER_VERTEX].MaxAtomicBuffers +
+             c->Program[MESA_SHADER_GEOMETRY].MaxAtomicBuffers +
+             c->Program[MESA_SHADER_FRAGMENT].MaxAtomicBuffers,
+             MAX_COMBINED_ATOMIC_BUFFERS);
+
+   c->MaxCombinedAtomicCounters =
+        _min(c->Program[MESA_SHADER_VERTEX].MaxAtomicCounters +
+             c->Program[MESA_SHADER_GEOMETRY].MaxAtomicCounters +
+             c->Program[MESA_SHADER_FRAGMENT].MaxAtomicCounters,
+             MAX_ATOMIC_COUNTERS);
+
+   /* follows what's in src/mesa/main/context.c */
+   c->MaxAtomicBufferBindings = MAX_COMBINED_ATOMIC_BUFFERS;
 }
 
 
