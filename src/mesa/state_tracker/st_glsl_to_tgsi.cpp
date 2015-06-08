@@ -3955,6 +3955,7 @@ glsl_to_tgsi_visitor::copy_propagate(void)
 int
 glsl_to_tgsi_visitor::eliminate_dead_code(void)
 {
+   return 0;
    glsl_to_tgsi_instruction **writes = rzalloc_array(mem_ctx,
                                                      glsl_to_tgsi_instruction *,
                                                      this->next_temp * 4);
