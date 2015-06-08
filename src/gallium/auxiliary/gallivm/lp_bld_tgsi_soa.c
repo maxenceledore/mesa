@@ -3650,6 +3650,54 @@ static void emit_epilogue(struct lp_build_tgsi_context * bld_base)
    }
 }
 
+/* TGSI_OPCODE_LOAD */
+
+static void
+load_emit(
+   const struct lp_build_tgsi_action * action,
+   struct lp_build_tgsi_context * bld_base,
+   struct lp_build_emit_data * emit_data)
+{
+   struct lp_build_tgsi_soa_context * bld = lp_soa_context(bld_base);
+   /* From tgsi.rst :
+    * Syntax: ``LOAD dst, resource, address``
+    * Example: ``LOAD TEMP[0], RES[0], TEMP[1]``
+    */
+
+   struct tgsi_full_instruction *inst = &bld_base->instructions[bld_base->pc];
+   LLVMValueRef resources = bld->shader_buffers_ptr;
+   LLVMValueRef offset;
+   LLVMValueRef counter_value;
+   emit_data->output[emit_data->chan] = counter_value;
+}
+
+/* TGSI_OPCODE_ATOMUADD */
+static void atom_uadd_emit(
+   const struct lp_build_tgsi_action * action,
+   struct lp_build_tgsi_context * bld_base,
+   struct lp_build_emit_data * emit_data)
+{
+   struct lp_build_tgsi_soa_context * bld = lp_soa_context(bld_base);
+   /* From tgsi.rst :
+    * Syntax: ``ATOMUADD dst, resource, offset, src``
+    * Example: ``ATOMUADD TEMP[0], RES[0], TEMP[1], TEMP[2]``
+    */
+
+   struct tgsi_full_instruction *inst = &bld_base->instructions[bld_base->pc];
+
+   LLVMValueRef shader_buffers_ptr = bld->shader_buffers;
+   LLVMValueRef offset = inst->Src[0].Register.Index;
+   LLVMValueRef counter_value, new_val;
+   LLVMValueRef increment_value;
+   
+
+   /* first, fetch and return atomic counter prior value */
+   emit_data->output[emit_data->chan] = counter_value;
+
+   /* then, increment and store it */
+   new_val = lp_build_add(&bld_base->uint_bld, counter_value, increment_value);
+}
+
 void
 lp_build_tgsi_soa(struct gallivm_state *gallivm,
                   const struct tgsi_token *tokens,
@@ -3774,6 +3822,9 @@ lp_build_tgsi_soa(struct gallivm_state *gallivm,
    bld.bld_base.op_actions[TGSI_OPCODE_SAMPLE_I].emit = sample_i_emit;
    bld.bld_base.op_actions[TGSI_OPCODE_SAMPLE_L].emit = sample_l_emit;
    bld.bld_base.op_actions[TGSI_OPCODE_SVIEWINFO].emit = sviewinfo_emit;
+
+   bld.bld_base.op_actions[TGSI_OPCODE_LOAD].emit = load_emit;
+   bld.bld_base.op_actions[TGSI_OPCODE_ATOMUADD].emit = atom_uadd_emit;
 
    if (gs_iface) {
       /* There's no specific value for this because it should always
