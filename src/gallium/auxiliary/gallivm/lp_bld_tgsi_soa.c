@@ -3857,7 +3857,7 @@ lp_build_tgsi_soa(struct gallivm_state *gallivm,
 
    lp_build_tgsi_llvm(&bld.bld_base, tokens);
 
-   if (0) {
+   if (1) {
       LLVMBasicBlockRef block = LLVMGetInsertBlock(gallivm->builder);
       LLVMValueRef function = LLVMGetBasicBlockParent(block);
       debug_printf("11111111111111111111111111111 \n");
