@@ -4457,7 +4457,7 @@ struct st_translate {
    struct ureg_src inputs[PIPE_MAX_SHADER_INPUTS];
    struct ureg_dst address[3];
    struct ureg_src samplers[PIPE_MAX_SAMPLERS];
-   struct ureg_src resources[PIPE_MAX_SAMPLERS /* XXX */];
+   struct ureg_src resources[PIPE_MAX_SHADER_RESOURCES];
    struct ureg_src systemValues[SYSTEM_VALUE_MAX];
    struct tgsi_texture_offset tex_offsets[MAX_GLSL_TEXTURE_OFFSET];
    unsigned array_sizes[MAX_ARRAYS];
