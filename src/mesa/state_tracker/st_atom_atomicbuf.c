@@ -30,6 +30,7 @@
 
 #include "pipe/p_context.h"
 #include "pipe/p_defines.h"
+#include "pipe/p_state.h"
 #include "util/u_inlines.h"
 #include "util/u_surface.h"
 
@@ -44,6 +45,7 @@ static void st_bind_atomics(struct st_context *st,
                            unsigned shader_type)
 {
    unsigned i;
+   struct pipe_shader_buffer sb;
 
    if (!prog)
       return;
@@ -68,10 +70,14 @@ static void st_bind_atomics(struct st_context *st,
             pipe_surface_release(st->pipe, &st_obj->surface);
          st_obj->surface = st->pipe->create_surface(
                st->pipe, st_obj->buffer, &tmpl);
+         st_obj->surface->writable = 1;
       }
+      sb.surface = st_obj->surface;
+      sb.buffer_offset = binding->Offset;
+      sb.buffer_size = st_obj->buffer->width0 - binding->Offset;
 
       st->pipe->set_shader_buffers(st->pipe, shader_type,
-                                   i, 1, &st_obj->surface);
+                                   i, 1, &sb);
    }
 }
 
