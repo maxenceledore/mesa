@@ -3955,7 +3955,6 @@ glsl_to_tgsi_visitor::copy_propagate(void)
 int
 glsl_to_tgsi_visitor::eliminate_dead_code(void)
 {
-   return 0;
    glsl_to_tgsi_instruction **writes = rzalloc_array(mem_ctx,
                                                      glsl_to_tgsi_instruction *,
                                                      this->next_temp * 4);
@@ -4078,7 +4077,8 @@ glsl_to_tgsi_visitor::eliminate_dead_code(void)
    for (int r = 0; r < this->next_temp; r++) {
       for (int c = 0; c < 4; c++) {
          glsl_to_tgsi_instruction *inst = writes[4 * r + c];
-         if (inst)
+         if (inst && ((inst->op != TGSI_OPCODE_LOAD) &&
+                      (inst->op != TGSI_OPCODE_ATOMUADD)))
             inst->dead_mask |= (1 << c);
       }
    }
