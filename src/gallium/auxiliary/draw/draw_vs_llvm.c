@@ -51,6 +51,8 @@ vs_llvm_run_linear( struct draw_vertex_shader *shader,
 		    float (*output)[4],
                     const void *constants[PIPE_MAX_CONSTANT_BUFFERS],
                     const unsigned constants_size[PIPE_MAX_CONSTANT_BUFFERS],
+                    const void *shader_buffers[PIPE_MAX_SHADER_RESOURCES],
+                    const unsigned shader_buffers_size[PIPE_MAX_SHADER_RESOURCES],
 		    unsigned count,
 		    unsigned input_stride,
 		    unsigned output_stride )

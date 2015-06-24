@@ -466,6 +466,34 @@ draw_set_mapped_constant_buffer(struct draw_context *draw,
 }
 
 
+void
+draw_set_mapped_shader_buffer(struct draw_context *draw,
+                              unsigned shader_type,
+                              unsigned slot,
+                              const void *buffer,
+                              unsigned size )
+{
+   debug_assert(shader_type == PIPE_SHADER_VERTEX ||
+                shader_type == PIPE_SHADER_GEOMETRY);
+   debug_assert(slot < PIPE_MAX_CONSTANT_BUFFERS);
+
+   draw_do_flush(draw, DRAW_FLUSH_PARAMETER_CHANGE);
+
+   switch (shader_type) {
+   case PIPE_SHADER_VERTEX:
+      draw->pt.user.vs_shader_buffers[slot] = buffer;
+      draw->pt.user.vs_shader_buffers_size[slot] = size;
+      break;
+   case PIPE_SHADER_GEOMETRY:
+      draw->pt.user.gs_shader_buffers[slot] = buffer;
+      draw->pt.user.gs_shader_buffers_size[slot] = size;
+      break;
+   default:
+      assert(0 && "invalid shader type in draw_set_mapped_constant_buffer");
+   }
+}
+
+
 /**
  * Tells the draw module to draw points with triangles if their size
  * is greater than this threshold.

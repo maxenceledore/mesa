@@ -263,7 +263,7 @@ llvm_middle_end_prepare( struct draw_pt_middle_end *middle,
 
 
 /**
- * Bind/update constant buffer pointers, clip planes and viewport dims.
+ * Bind/update constant and shader buffer pointers, clip planes and viewport dims.
  * These are "light weight" parameters which aren't baked into the
  * generated code.  Updating these items is much cheaper than revalidating
  * and rebuilding the generated pipeline code.
@@ -294,6 +294,25 @@ llvm_middle_end_bind_parameters(struct draw_pt_middle_end *middle)
       llvm->gs_jit_context.num_constants[i] = num_consts;
       if (num_consts == 0) {
          llvm->gs_jit_context.constants[i] = fake_const_buf;
+      }
+   }
+
+   for (i = 0; i < Elements(llvm->jit_context.vs_shader_buffers); ++i) {
+      int num_shader_buffers =
+         draw->pt.user.vs_shader_buffers_size[i];
+      llvm->jit_context.vs_shader_buffers[i] = draw->pt.user.vs_shader_buffers[i];
+      llvm->jit_context.num_vs_shader_buffers[i] = num_shader_buffers;
+      if (num_shader_buffers == 0) {
+         llvm->jit_context.vs_shader_buffers[i] = fake_shader_buf;
+      }
+   }
+   for (i = 0; i < Elements(llvm->gs_jit_context.shader_buffers); ++i) {
+      int num_shader_buffers =
+         draw->pt.user.gs_shader_buffers_size[i];
+      llvm->gs_jit_context.shader_buffers[i] = draw->pt.user.gs_shader_buffers[i];
+      llvm->gs_jit_context.num_shader_buffers[i] = num_shader_buffers;
+      if (num_shader_buffers == 0) {
+         llvm->gs_jit_context.shader_buffers[i] = fake_shader_buf;
       }
    }
 
@@ -408,6 +427,8 @@ llvm_pipeline_generic(struct draw_pt_middle_end *middle,
       draw_geometry_shader_run(gshader,
                                draw->pt.user.gs_constants,
                                draw->pt.user.gs_constants_size,
+                               draw->pt.user.gs_shader_buffers,
+                               draw->pt.user.gs_shader_buffers_size,
                                vert_info,
                                prim_info,
                                &vshader->info,

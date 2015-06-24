@@ -789,6 +789,21 @@ tgsi_exec_set_constant_buffers(struct tgsi_exec_machine *mach,
 }
 
 
+extern void
+tgsi_exec_set_shader_buffers(struct tgsi_exec_machine *mach,
+                             unsigned num_bufs,
+                             const void **bufs,
+                             const unsigned *buf_sizes)
+{
+   unsigned i;
+
+   for (i = 0; i < num_bufs; i++) {
+      mach->ShaderBuffers[i] = bufs[i];
+      mach->ShaderBuffersSize[i] = buf_sizes[i];
+   }
+}
+
+
 /**
  * Check if there's a potential src/dst register data dependency when
  * using SOA execution.

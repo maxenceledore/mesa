@@ -290,6 +290,9 @@ struct tgsi_exec_machine
    const void *Consts[PIPE_MAX_CONSTANT_BUFFERS];
    unsigned ConstsSize[PIPE_MAX_CONSTANT_BUFFERS];
 
+   const void *ShaderBuffers[PIPE_MAX_SHADER_RESOURCES];
+   unsigned ShaderBuffersSize[PIPE_MAX_SHADER_RESOURCES];
+
    const struct tgsi_token       *Tokens;   /**< Declarations, instructions */
    unsigned                      Processor; /**< TGSI_PROCESSOR_x */
 
@@ -412,6 +415,13 @@ tgsi_exec_set_constant_buffers(struct tgsi_exec_machine *mach,
                                unsigned num_bufs,
                                const void **bufs,
                                const unsigned *buf_sizes);
+
+
+extern void
+tgsi_exec_set_shader_buffers(struct tgsi_exec_machine *mach,
+                             unsigned num_bufs,
+                             const void **bufs,
+                             const unsigned *buf_sizes);
 
 
 static INLINE int

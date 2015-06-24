@@ -501,7 +501,7 @@ draw_vbo(struct draw_context *draw,
                       draw->pt.vertex_element[i].vertex_buffer_index,
                       util_format_name(draw->pt.vertex_element[i].src_format));
       }
-      debug_printf("Buffers:\n");
+      debug_printf("Vertex Buffers:\n");
       for (i = 0; i < draw->pt.nr_vertex_buffers; i++) {
          debug_printf("  %u: stride=%u offset=%u size=%d ptr=%p\n",
                       i,
@@ -509,6 +509,13 @@ draw_vbo(struct draw_context *draw,
                       draw->pt.vertex_buffer[i].buffer_offset,
                       (int) draw->pt.user.vbuffer[i].size,
                       draw->pt.user.vbuffer[i].map);
+      }
+      debug_printf("Shader Buffers:\n");
+      for (i = 0; i < draw->pt.nr_shader_buffers; i++) {
+         debug_printf("  %u: offset=%u size=%d\n",
+                      i,
+                      draw->pt.shader_buffer[i].buffer_offset,
+                      (int) draw->pt.shader_buffer[i].buffer_size);
       }
    }
 

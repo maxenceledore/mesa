@@ -87,6 +87,8 @@ vs_exec_run_linear( struct draw_vertex_shader *shader,
 		    float (*output)[4],
                     const void *constants[PIPE_MAX_CONSTANT_BUFFERS],
                     const unsigned const_size[PIPE_MAX_CONSTANT_BUFFERS],
+                    const void *shader_buffers[PIPE_MAX_SHADER_RESOURCES],
+                    const unsigned shader_buffers_size[PIPE_MAX_SHADER_RESOURCES],
 		    unsigned count,
 		    unsigned input_stride,
 		    unsigned output_stride )
@@ -100,6 +102,9 @@ vs_exec_run_linear( struct draw_vertex_shader *shader,
    debug_assert(!shader->draw->llvm);
    tgsi_exec_set_constant_buffers(machine, PIPE_MAX_CONSTANT_BUFFERS,
                                   constants, const_size);
+
+   tgsi_exec_set_shader_buffers(machine, PIPE_MAX_SHADER_RESOURCES,
+                                shader_buffers, shader_buffers_size);
 
    if (shader->info.uses_instanceid) {
       unsigned i = machine->SysSemanticToIndex[TGSI_SEMANTIC_INSTANCEID];

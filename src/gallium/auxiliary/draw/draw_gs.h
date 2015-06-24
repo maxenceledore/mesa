@@ -112,7 +112,9 @@ struct draw_geometry_shader {
 
    void     (*prepare)(struct draw_geometry_shader *shader,
                        const void *constants[PIPE_MAX_CONSTANT_BUFFERS], 
-                       const unsigned constants_size[PIPE_MAX_CONSTANT_BUFFERS]);
+                       const unsigned constants_size[PIPE_MAX_CONSTANT_BUFFERS],
+                       const void *shader_buffers[PIPE_MAX_SHADER_RESOURCES],
+                       const unsigned shader_buffers_size[PIPE_MAX_SHADER_RESOURCES]);
    unsigned (*run)(struct draw_geometry_shader *shader,
                    unsigned input_primitives);
 };
@@ -127,6 +129,8 @@ void draw_geometry_shader_new_instance(struct draw_geometry_shader *gs);
 int draw_geometry_shader_run(struct draw_geometry_shader *shader,
                              const void *constants[PIPE_MAX_CONSTANT_BUFFERS], 
                              const unsigned constants_size[PIPE_MAX_CONSTANT_BUFFERS], 
+                             const void *shader_buffers[PIPE_MAX_SHADER_RESOURCES],
+                             const unsigned shader_buffers_size[PIPE_MAX_SHADER_RESOURCES],
                              const struct draw_vertex_info *input_verts,
                              const struct draw_prim_info *input_prim,
                              const struct tgsi_shader_info *input_info,

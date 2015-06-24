@@ -173,6 +173,9 @@ struct draw_context
       struct pipe_vertex_buffer vertex_buffer[PIPE_MAX_ATTRIBS];
       unsigned nr_vertex_buffers;
 
+      struct pipe_shader_buffer shader_buffer[PIPE_MAX_SHADER_RESOURCES];
+      unsigned nr_shader_buffers;
+
       /*
        * This is the largest legal index value for the current set of
        * bound vertex buffers.  Regardless of any other consideration,
@@ -204,6 +207,11 @@ struct draw_context
          unsigned vs_constants_size[PIPE_MAX_CONSTANT_BUFFERS];
          const void *gs_constants[PIPE_MAX_CONSTANT_BUFFERS];
          unsigned gs_constants_size[PIPE_MAX_CONSTANT_BUFFERS];
+
+         const void *vs_shader_buffers[PIPE_MAX_SHADER_RESOURCES];
+         unsigned vs_shader_buffers_size[PIPE_MAX_SHADER_RESOURCES];
+         const void *gs_shader_buffers[PIPE_MAX_SHADER_RESOURCES];
+         unsigned gs_shader_buffers_size[PIPE_MAX_SHADER_RESOURCES];
          
          /* pointer to planes */
          float (*planes)[DRAW_TOTAL_CLIP_PLANES][4]; 

@@ -187,12 +187,17 @@ static void tgsi_fetch_gs_input(struct draw_geometry_shader *shader,
 
 static void tgsi_gs_prepare(struct draw_geometry_shader *shader,
                             const void *constants[PIPE_MAX_CONSTANT_BUFFERS],
-                            const unsigned constants_size[PIPE_MAX_CONSTANT_BUFFERS])
+                            const unsigned constants_size[PIPE_MAX_CONSTANT_BUFFERS],
+                            const void *shader_buffers[PIPE_MAX_SHADER_RESOURCES],
+                            const unsigned shader_buffers_size[PIPE_MAX_CONSTANT_BUFFERS])
 {
    struct tgsi_exec_machine *machine = shader->machine;
 
    tgsi_exec_set_constant_buffers(machine, PIPE_MAX_CONSTANT_BUFFERS,
                                   constants, constants_size);
+
+   tgsi_exec_set_shader_buffers(machine, PIPE_MAX_SHADER_RESOURCES,
+                                shader_buffers, shader_buffers_size);
 }
 
 static unsigned tgsi_gs_run(struct draw_geometry_shader *shader,
@@ -367,7 +372,9 @@ llvm_fetch_gs_outputs(struct draw_geometry_shader *shader,
 static void
 llvm_gs_prepare(struct draw_geometry_shader *shader,
                 const void *constants[PIPE_MAX_CONSTANT_BUFFERS],
-                const unsigned constants_size[PIPE_MAX_CONSTANT_BUFFERS])
+                const unsigned constants_size[PIPE_MAX_CONSTANT_BUFFERS],
+                const void *shader_buffers[PIPE_MAX_SHADER_RESOURCES],
+                const unsigned shader_buffers_size[PIPE_MAX_SHADER_RESOURCES])
 {
 }
 
@@ -527,6 +534,8 @@ static void gs_tri_adj(struct draw_geometry_shader *shader,
 int draw_geometry_shader_run(struct draw_geometry_shader *shader,
                              const void *constants[PIPE_MAX_CONSTANT_BUFFERS],
                              const unsigned constants_size[PIPE_MAX_CONSTANT_BUFFERS],
+                             const void *shader_buffers[PIPE_MAX_SHADER_RESOURCES],
+                             const unsigned shader_buffers_size[PIPE_MAX_SHADER_RESOURCES],
                              const struct draw_vertex_info *input_verts,
                              const struct draw_prim_info *input_prim,
                              const struct tgsi_shader_info *input_info,
@@ -622,7 +631,7 @@ int draw_geometry_shader_run(struct draw_geometry_shader *shader,
    }
 #endif
 
-   shader->prepare(shader, constants, constants_size);
+   shader->prepare(shader, constants, constants_size, shader_buffers, shader_buffers_size);
 
    if (input_prim->linear)
       gs_run(shader, input_prim, input_verts,
