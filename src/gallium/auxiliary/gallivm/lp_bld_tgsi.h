@@ -225,6 +225,8 @@ lp_build_tgsi_soa(struct gallivm_state *gallivm,
                   struct lp_build_mask_context *mask,
                   LLVMValueRef consts_ptr,
                   LLVMValueRef const_sizes_ptr,
+                  LLVMValueRef shader_buffers_ptr,
+                  LLVMValueRef shader_buffers_sizes_ptr,
                   const struct lp_bld_tgsi_system_values *system_values,
                   const LLVMValueRef (*inputs)[4],
                   LLVMValueRef (*outputs)[4],
@@ -439,6 +441,10 @@ struct lp_build_tgsi_soa_context
    LLVMValueRef const_sizes_ptr;
    LLVMValueRef consts[LP_MAX_TGSI_CONST_BUFFERS];
    LLVMValueRef consts_sizes[LP_MAX_TGSI_CONST_BUFFERS];
+   LLVMValueRef shader_buffers_ptr;
+   LLVMValueRef shader_buffers_sizes_ptr;
+   LLVMValueRef shader_buffers[LP_MAX_TGSI_SHADER_BUFFERS];
+   LLVMValueRef shader_buffers_sizes[LP_MAX_TGSI_SHADER_BUFFERS];
    const LLVMValueRef (*inputs)[TGSI_NUM_CHANNELS];
    LLVMValueRef (*outputs)[TGSI_NUM_CHANNELS];
    LLVMValueRef context_ptr;

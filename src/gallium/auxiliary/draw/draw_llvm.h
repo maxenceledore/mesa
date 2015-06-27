@@ -124,6 +124,8 @@ struct draw_jit_context
 {
    const float *vs_constants[LP_MAX_TGSI_CONST_BUFFERS];
    int num_vs_constants[LP_MAX_TGSI_CONST_BUFFERS];
+   uint *vs_shader_buffers[LP_MAX_TGSI_SHADER_BUFFERS];
+   int num_vs_shader_buffers[LP_MAX_TGSI_SHADER_BUFFERS];
    float (*planes) [DRAW_TOTAL_CLIP_PLANES][4];
    struct pipe_viewport_state *viewports;
 
@@ -138,6 +140,8 @@ enum {
    DRAW_JIT_CTX_VIEWPORT             = 3,
    DRAW_JIT_CTX_TEXTURES             = 4,
    DRAW_JIT_CTX_SAMPLERS             = 5,
+   DRAW_JIT_CTX_SHADER_BUFFERS       = 6,
+   DRAW_JIT_CTX_NUM_SHADER_BUFFERS   = 7,
    DRAW_JIT_CTX_NUM_FIELDS
 };
 
@@ -146,6 +150,12 @@ enum {
 
 #define draw_jit_context_num_vs_constants(_gallivm, _ptr) \
    lp_build_struct_get_ptr(_gallivm, _ptr, DRAW_JIT_CTX_NUM_CONSTANTS, "num_vs_constants")
+
+#define draw_jit_context_vs_shader_buffers(_gallivm, _ptr) \
+   lp_build_struct_get_ptr(_gallivm, _ptr, DRAW_JIT_CTX_SHADER_BUFFERS, "vs_shader_buffers")
+
+#define draw_jit_context_vs_num_shader_buffers(_gallivm, _ptr) \
+   lp_build_struct_get_ptr(_gallivm, _ptr, DRAW_JIT_CTX_NUM_SHADER_BUFFERS, "num_vs_shader_buffers")
 
 #define draw_jit_context_planes(_gallivm, _ptr) \
    lp_build_struct_get(_gallivm, _ptr, DRAW_JIT_CTX_PLANES, "planes")
@@ -206,6 +216,8 @@ struct draw_gs_jit_context
 {
    const float *constants[LP_MAX_TGSI_CONST_BUFFERS];
    int num_constants[LP_MAX_TGSI_CONST_BUFFERS];
+   uint *shader_buffers[LP_MAX_TGSI_SHADER_BUFFERS];
+   int num_shader_buffers[LP_MAX_TGSI_SHADER_BUFFERS];
    float (*planes) [DRAW_TOTAL_CLIP_PLANES][4];
    struct pipe_viewport_state *viewports;
 
@@ -233,7 +245,9 @@ enum {
    DRAW_GS_JIT_CTX_PRIM_LENGTHS = 6,
    DRAW_GS_JIT_CTX_EMITTED_VERTICES = 7,
    DRAW_GS_JIT_CTX_EMITTED_PRIMS = 8,
-   DRAW_GS_JIT_CTX_NUM_FIELDS = 9
+   DRAW_GS_JIT_CTX_SHADER_BUFFERS = 9,
+   DRAW_GS_JIT_CTX_NUM_SHADER_BUFFERS = 10,
+   DRAW_GS_JIT_CTX_NUM_FIELDS = 11
 };
 
 #define draw_gs_jit_context_constants(_gallivm, _ptr) \
@@ -241,6 +255,12 @@ enum {
 
 #define draw_gs_jit_context_num_constants(_gallivm, _ptr) \
    lp_build_struct_get_ptr(_gallivm, _ptr, DRAW_GS_JIT_CTX_NUM_CONSTANTS, "num_constants")
+
+#define draw_gs_jit_context_shader_buffers(_gallivm, _ptr) \
+   lp_build_struct_get_ptr(_gallivm, _ptr, DRAW_GS_JIT_CTX_SHADER_BUFFERS, "shader_buffers")
+
+#define draw_gs_jit_context_num_shader_buffers(_gallivm, _ptr) \
+   lp_build_struct_get_ptr(_gallivm, _ptr, DRAW_GS_JIT_CTX_NUM_SHADER_BUFFERS, "num_shader_buffers")
 
 #define draw_gs_jit_context_planes(_gallivm, _ptr) \
    lp_build_struct_get(_gallivm, _ptr, DRAW_GS_JIT_CTX_PLANES, "planes")

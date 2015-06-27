@@ -173,6 +173,12 @@ lp_jit_create_types(struct lp_fragment_shader_variant *lp)
       LP_CHECK_MEMBER_OFFSET(struct lp_jit_context, num_constants,
                              gallivm->target, context_type,
                              LP_JIT_CTX_NUM_CONSTANTS);
+      LP_CHECK_MEMBER_OFFSET(struct lp_jit_context, shader_buffers,
+                             gallivm->target, context_type,
+                             LP_JIT_CTX_SHADER_BUFFERS);
+      LP_CHECK_MEMBER_OFFSET(struct lp_jit_context, num_shader_buffers,
+                             gallivm->target, context_type,
+                             LP_JIT_CTX_NUM_SHADER_BUFFERS);
       LP_CHECK_MEMBER_OFFSET(struct lp_jit_context, alpha_ref_value,
                              gallivm->target, context_type,
                              LP_JIT_CTX_ALPHA_REF);

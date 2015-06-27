@@ -230,12 +230,21 @@ create_jit_context_type(struct gallivm_state *gallivm,
                                  PIPE_MAX_SHADER_SAMPLER_VIEWS); /* textures */
    elem_types[5] = LLVMArrayType(sampler_type,
                                  PIPE_MAX_SAMPLERS); /* samplers */
+   elem_types[6] = LLVMArrayType(LLVMPointerType(int_type, 0), /* vs_shader_buffers */
+                                 LP_MAX_TGSI_SHADER_BUFFERS);
+   elem_types[7] = LLVMArrayType(int_type, /* num_vs_shader_buffer */
+                                 LP_MAX_TGSI_SHADER_BUFFERS);
+
    context_type = LLVMStructTypeInContext(gallivm->context, elem_types,
                                           Elements(elem_types), 0);
    LP_CHECK_MEMBER_OFFSET(struct draw_jit_context, vs_constants,
                           target, context_type, DRAW_JIT_CTX_CONSTANTS);
    LP_CHECK_MEMBER_OFFSET(struct draw_jit_context, num_vs_constants,
                           target, context_type, DRAW_JIT_CTX_NUM_CONSTANTS);
+   LP_CHECK_MEMBER_OFFSET(struct draw_jit_context, vs_shader_buffers,
+                          target, context_type, DRAW_JIT_CTX_SHADER_BUFFERS);
+   LP_CHECK_MEMBER_OFFSET(struct draw_jit_context, num_vs_shader_buffers,
+                          target, context_type, DRAW_JIT_CTX_NUM_SHADER_BUFFERS);
    LP_CHECK_MEMBER_OFFSET(struct draw_jit_context, planes,
                           target, context_type, DRAW_JIT_CTX_PLANES);
    LP_CHECK_MEMBER_OFFSET(struct draw_jit_context, viewports,
@@ -286,6 +295,10 @@ create_gs_jit_context_type(struct gallivm_state *gallivm,
                                                   vector_length), 0);
    elem_types[8] = LLVMPointerType(LLVMVectorType(int_type,
                                                   vector_length), 0);
+   elem_types[9] = LLVMArrayType(LLVMPointerType(int_type, 0), /* shader_buffers */
+                                 LP_MAX_TGSI_SHADER_BUFFERS);
+   elem_types[10]= LLVMArrayType(int_type, /* num_shader_buffers */
+                                 LP_MAX_TGSI_SHADER_BUFFERS);
 
    context_type = LLVMStructTypeInContext(gallivm->context, elem_types,
                                           Elements(elem_types), 0);
@@ -294,6 +307,10 @@ create_gs_jit_context_type(struct gallivm_state *gallivm,
                           target, context_type, DRAW_GS_JIT_CTX_CONSTANTS);
    LP_CHECK_MEMBER_OFFSET(struct draw_gs_jit_context, num_constants,
                           target, context_type, DRAW_GS_JIT_CTX_NUM_CONSTANTS);
+   LP_CHECK_MEMBER_OFFSET(struct draw_gs_jit_context, shader_buffers,
+                          target, context_type, DRAW_JIT_CTX_SHADER_BUFFERS);
+   LP_CHECK_MEMBER_OFFSET(struct draw_gs_jit_context, num_shader_buffers,
+                          target, context_type, DRAW_JIT_CTX_NUM_SHADER_BUFFERS);
    LP_CHECK_MEMBER_OFFSET(struct draw_gs_jit_context, planes,
                           target, context_type, DRAW_GS_JIT_CTX_PLANES);
    LP_CHECK_MEMBER_OFFSET(struct draw_gs_jit_context, viewports,
@@ -610,6 +627,10 @@ generate_vs(struct draw_llvm_variant *variant,
       draw_jit_context_vs_constants(variant->gallivm, context_ptr);
    LLVMValueRef num_consts_ptr =
       draw_jit_context_num_vs_constants(variant->gallivm, context_ptr);
+   LLVMValueRef shader_buffers_ptr =
+      draw_jit_context_vs_shader_buffers(variant->gallivm, context_ptr);
+   LLVMValueRef num_shader_buffers_ptr =
+      draw_jit_context_vs_num_shader_buffers(variant->gallivm, context_ptr);
 
    lp_build_tgsi_soa(variant->gallivm,
                      tokens,
@@ -617,6 +638,8 @@ generate_vs(struct draw_llvm_variant *variant,
                      NULL /*struct lp_build_mask_context *mask*/,
                      consts_ptr,
                      num_consts_ptr,
+                     shader_buffers_ptr,
+                     num_shader_buffers_ptr,
                      system_values,
                      inputs,
                      outputs,
@@ -2082,6 +2105,7 @@ draw_gs_llvm_generate(struct draw_llvm *llvm,
    struct draw_gs_llvm_iface gs_iface;
    const struct tgsi_token *tokens = variant->shader->base.state.tokens;
    LLVMValueRef consts_ptr, num_consts_ptr;
+   LLVMValueRef shader_buffers_ptr, num_shader_buffers_ptr;
    LLVMValueRef outputs[PIPE_MAX_SHADER_OUTPUTS][TGSI_NUM_CHANNELS];
    struct lp_build_mask_context mask;
    const struct tgsi_shader_info *gs_info = &variant->shader->base.info;
@@ -2161,6 +2185,10 @@ draw_gs_llvm_generate(struct draw_llvm *llvm,
    num_consts_ptr =
       draw_gs_jit_context_num_constants(variant->gallivm, context_ptr);
 
+   shader_buffers_ptr = draw_gs_jit_context_shader_buffers(variant->gallivm, context_ptr);
+   num_shader_buffers_ptr =
+      draw_gs_jit_context_num_shader_buffers(variant->gallivm, context_ptr);
+
    /* code generated texture sampling */
    sampler = draw_llvm_sampler_soa_create(variant->key.samplers);
 
@@ -2182,6 +2210,8 @@ draw_gs_llvm_generate(struct draw_llvm *llvm,
                      &mask,
                      consts_ptr,
                      num_consts_ptr,
+                     shader_buffers_ptr,
+                     num_shader_buffers_ptr,
                      &system_values,
                      NULL,
                      outputs,

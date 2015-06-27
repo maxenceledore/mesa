@@ -272,6 +272,7 @@ static void
 llvm_middle_end_bind_parameters(struct draw_pt_middle_end *middle)
 {
    static const float fake_const_buf[4];
+   static const int fake_shader_buf[4];
    struct llvm_middle_end *fpme = llvm_middle_end(middle);
    struct draw_context *draw = fpme->draw;
    struct draw_llvm *llvm = fpme->llvm;

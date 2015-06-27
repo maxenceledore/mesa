@@ -53,6 +53,8 @@
 
 #define LP_MAX_TGSI_CONST_BUFFERS 16
 
+#define LP_MAX_TGSI_SHADER_BUFFERS 32
+
 /*
  * For quick access we cache registers in statically
  * allocated arrays. Here we define the maximum size

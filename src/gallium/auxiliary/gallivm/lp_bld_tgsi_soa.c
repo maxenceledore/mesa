@@ -2794,6 +2794,18 @@ lp_emit_declaration_soa(
    }
       break;
 
+   case TGSI_FILE_RESOURCE:
+   {
+      unsigned idx2D = decl->Dim.Index2D;
+      LLVMValueRef index2D = lp_build_const_int32(gallivm, idx2D);
+      assert(idx2D < LP_MAX_TGSI_SHADER_BUFFERS);
+      bld->shader_buffers[idx2D] =
+         lp_build_array_get(gallivm, bld->shader_buffers_ptr, index2D);
+      bld->shader_buffers_sizes[idx2D] =
+         lp_build_array_get(gallivm, bld->shader_buffers_sizes_ptr, index2D);
+   }
+      break;
+
    default:
       /* don't need to declare other vars */
       break;
@@ -3645,6 +3657,8 @@ lp_build_tgsi_soa(struct gallivm_state *gallivm,
                   struct lp_build_mask_context *mask,
                   LLVMValueRef consts_ptr,
                   LLVMValueRef const_sizes_ptr,
+                  LLVMValueRef shader_buffers_ptr,
+                  LLVMValueRef shader_buffers_sizes_ptr,
                   const struct lp_bld_tgsi_system_values *system_values,
                   const LLVMValueRef (*inputs)[TGSI_NUM_CHANNELS],
                   LLVMValueRef (*outputs)[TGSI_NUM_CHANNELS],
@@ -3674,6 +3688,8 @@ lp_build_tgsi_soa(struct gallivm_state *gallivm,
    bld.outputs = outputs;
    bld.consts_ptr = consts_ptr;
    bld.const_sizes_ptr = const_sizes_ptr;
+   bld.shader_buffers_ptr = shader_buffers_ptr;
+   bld.shader_buffers_sizes_ptr = shader_buffers_sizes_ptr;
    bld.sampler = sampler;
    bld.bld_base.info = info;
    bld.indirect_files = info->indirect_files;
