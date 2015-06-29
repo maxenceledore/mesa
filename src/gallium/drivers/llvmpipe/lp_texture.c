@@ -545,6 +545,19 @@ llvmpipe_transfer_map( struct pipe_context *pipe,
       }
    }
 
+   /* Check if we're mapping the current shader buffer */
+   if ((usage & PIPE_TRANSFER_WRITE) &&
+       (resource->bind & PIPE_BIND_SHADER_BUFFER)) {
+      unsigned i;
+      for (i = 0; i < Elements(llvmpipe->shader_buffers[PIPE_SHADER_FRAGMENT]); ++i) {
+         if (resource == llvmpipe->shader_buffers[PIPE_SHADER_FRAGMENT][i].buffer) {
+            /* shader_buffers may have changed */
+            llvmpipe->dirty |= LP_NEW_SHADER_BUFFERS;
+            break;
+         }
+      }
+   }
+
    lpt = CALLOC_STRUCT(llvmpipe_transfer);
    if (!lpt)
       return NULL;
