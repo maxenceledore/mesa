@@ -217,6 +217,11 @@ void llvmpipe_update_derived( struct llvmpipe_context *llvmpipe )
                                 Elements(llvmpipe->constants[PIPE_SHADER_FRAGMENT]),
                                 llvmpipe->constants[PIPE_SHADER_FRAGMENT]);
 
+   if (llvmpipe->dirty & LP_NEW_SHADER_BUFFERS)
+      lp_setup_set_fs_shader_buffers(llvmpipe->setup,
+                                     Elements(llvmpipe->shader_buffers[PIPE_SHADER_FRAGMENT]),
+                                     llvmpipe->shader_buffers[PIPE_SHADER_FRAGMENT]);
+
    if (llvmpipe->dirty & (LP_NEW_SAMPLER_VIEW))
       lp_setup_set_fragment_sampler_views(llvmpipe->setup,
                                           llvmpipe->num_sampler_views[PIPE_SHADER_FRAGMENT],

@@ -655,6 +655,27 @@ lp_setup_set_fs_constants(struct lp_setup_context *setup,
 
 
 void
+lp_setup_set_fs_shader_buffers(struct lp_setup_context *setup,
+                               unsigned num,
+                               struct pipe_shader_buffer *buffers)
+{
+   unsigned i;
+
+   LP_DBG(DEBUG_SETUP, "%s %p\n", __FUNCTION__, (void *) buffers);
+
+   assert(num <= Elements(setup->shader_buffers));
+
+   for (i = 0; i < num; ++i) {
+      util_copy_shader_buffer(&setup->shader_buffers[i].current, &buffers[i]);
+   }
+   for (; i < Elements(setup->shader_buffers); i++) {
+      util_copy_shader_buffer(&setup->shader_buffers[i].current, NULL);
+   }
+   setup->dirty |= LP_SETUP_SHADER_BUFFERS;
+}
+
+
+void
 lp_setup_set_alpha_ref_value( struct lp_setup_context *setup,
                               float alpha_ref_value )
 {
@@ -1002,6 +1023,7 @@ static boolean
 try_update_scene_state( struct lp_setup_context *setup )
 {
    static const float fake_const_buf[4];
+   static const uint32_t fake_shader_buf[4];
    boolean new_scene = (setup->fs.stored == NULL);
    struct lp_scene *scene = setup->scene;
    unsigned i;
@@ -1118,6 +1140,63 @@ try_update_scene_state( struct lp_setup_context *setup )
          num_constants =
             setup->constants[i].stored_size / (sizeof(float) * 4);
          setup->fs.current.jit_context.num_constants[i] = num_constants;
+         setup->dirty |= LP_SETUP_NEW_FS;
+      }
+   }
+
+
+   if (setup->dirty & LP_SETUP_SHADER_BUFFERS) {
+      for (i = 0; i < Elements(setup->shader_buffers); ++i) {
+         struct pipe_resource *buffer = setup->shader_buffers[i].current.buffer;
+         const unsigned current_size = setup->shader_buffers[i].current.buffer_size;
+         const ubyte *current_data = NULL;
+         int num_shader_buffers;
+
+         if (buffer) {
+            /* resource buffer */
+            current_data = (ubyte *) llvmpipe_resource_data(buffer);
+         }
+         else if (setup->shader_buffers[i].current.user_buffer) {
+            /* user-space buffer */
+            current_data = (ubyte *) setup->shader_buffers[i].current.user_buffer;
+         }
+
+         if (current_data) {
+            current_data += setup->shader_buffers[i].current.buffer_offset;
+
+            /* TODO: copy only the actually used shader_buffers ? */
+
+            if (setup->shader_buffers[i].stored_size != current_size ||
+               !setup->shader_buffers[i].stored_data ||
+               memcmp(setup->shader_buffers[i].stored_data,
+                      current_data,
+                      current_size) != 0) {
+               void *stored;
+
+               stored = lp_scene_alloc(scene, current_size);
+               if (!stored) {
+                  assert(!new_scene);
+                  return FALSE;
+               }
+
+               memcpy(stored,
+                      current_data,
+                      current_size);
+               setup->shader_buffers[i].stored_size = current_size;
+               setup->shader_buffers[i].stored_data = stored;
+            }
+            setup->fs.current.jit_context.shader_buffers[i] =
+               setup->shader_buffers[i].stored_data;
+         }
+         else {
+            setup->shader_buffers[i].stored_size = 0;
+            setup->shader_buffers[i].stored_data = NULL;
+            setup->fs.current.jit_context.shader_buffers[i] = fake_shader_buf;
+         }
+
+         num_shader_buffers =
+            setup->shader_buffers[i].stored_size / (sizeof(uint));
+         setup->fs.current.jit_context.num_shader_buffers[i] = num_shader_buffers;
          setup->dirty |= LP_SETUP_NEW_FS;
       }
    }

@@ -49,6 +49,7 @@
 #define LP_SETUP_NEW_BLEND_COLOR 0x04
 #define LP_SETUP_NEW_SCISSOR     0x08
 #define LP_SETUP_NEW_VIEWPORTS   0x10
+#define LP_SETUP_SHADER_BUFFERS  0x20
 
 
 struct lp_setup_variant;
@@ -141,6 +142,13 @@ struct lp_setup_context
       unsigned stored_size;
       const void *stored_data;
    } constants[LP_MAX_TGSI_CONST_BUFFERS];
+
+   /** fragment shader shader buffers */
+   struct {
+      struct pipe_shader_buffer current;
+      unsigned stored_size;
+      const void *stored_data;
+   } shader_buffers[LP_MAX_TGSI_SHADER_BUFFERS];
 
    struct {
       struct pipe_blend_color current;
