@@ -69,6 +69,14 @@ initialize_context(struct gl_context *ctx, gl_api api)
    ctx->Const.Program[MESA_SHADER_COMPUTE].MaxInputComponents = 0; /* not used */
    ctx->Const.Program[MESA_SHADER_COMPUTE].MaxOutputComponents = 0; /* not used */
 
+   ctx->Const.Program[MESA_SHADER_VERTEX].MaxAtomicCounters = 8;
+   ctx->Const.Program[MESA_SHADER_VERTEX].MaxAtomicBuffers = 8;
+   ctx->Const.Program[MESA_SHADER_GEOMETRY].MaxAtomicCounters = 8;
+   ctx->Const.Program[MESA_SHADER_GEOMETRY].MaxAtomicBuffers = 8;
+   ctx->Const.Program[MESA_SHADER_FRAGMENT].MaxAtomicCounters = 8;
+   ctx->Const.Program[MESA_SHADER_FRAGMENT].MaxAtomicBuffers = 8;
+   ctx->Const.MaxCombinedAtomicBuffers = 24;
+
    switch (ctx->Const.GLSLVersion) {
    case 100:
       ctx->Const.MaxClipPlanes = 0;

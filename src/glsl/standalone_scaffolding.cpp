@@ -130,6 +130,7 @@ void initialize_context_to_defaults(struct gl_context *ctx, gl_api api)
    ctx->Extensions.ARB_gpu_shader5 = true;
    ctx->Extensions.ARB_gpu_shader_fp64 = true;
    ctx->Extensions.ARB_sample_shading = true;
+   ctx->Extensions.ARB_shader_atomic_counters = true;
    ctx->Extensions.ARB_shader_bit_encoding = true;
    ctx->Extensions.ARB_shader_stencil_export = true;
    ctx->Extensions.ARB_shader_texture_lod = true;
